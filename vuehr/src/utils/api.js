@@ -32,7 +32,7 @@ axios.interceptors.response.use(success => {
 
 let base = '';
 
-// 封装请求
+// 封装请求（参数以 key value 格式传递）
 export const postKeyValueRequest = (url, params) => {
     return axios({
         method: 'post',
@@ -52,3 +52,36 @@ export const postKeyValueRequest = (url, params) => {
         }
     });
 };
+
+// 封装请求（参数以 json 格式传递）
+export const postJsonRequest = (url, params) => {
+    return axios({
+        method: 'post',
+        url: `${base}${url}`,
+        data: params
+    })
+}
+
+export const getJsonRequest = (url, params) => {
+    return axios({
+        method: 'get',
+        url: `${base}${url}`,
+        data: params
+    })
+}
+
+export const putJsonRequest = (url, params) => {
+    return axios({
+        method: 'put',
+        url: `${base}${url}`,
+        data: params
+    })
+}
+
+export const deleteJsonRequest = (url, params) => {
+    return axios({
+        method: 'delete',
+        url: `${base}${url}`,
+        data: params
+    })
+}

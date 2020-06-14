@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {postKeyValueRequest} from "../utils/api";
+// import {postKeyValueRequest} from "../utils/api";
 
 export default {
     name: "Login",
@@ -39,7 +39,9 @@ export default {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
                     // alert("submit!")
-                    postKeyValueRequest('/doLogin', this.loginForm).then(response => {
+                    // postKeyValueRequest('/doLogin', this.loginForm).then(response => {
+                    // 封装请求对象，不再需要 import 导入，直接使用 this 调用
+                    this.postKeyValueReq('/doLogin', this.loginForm).then(response => {
                         if (response) {
                             // alert(JSON.stringify(response));
                             window.sessionStorage.setItem('user', JSON.stringify(response.data));
