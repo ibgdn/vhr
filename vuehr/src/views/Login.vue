@@ -17,18 +17,20 @@
 </template>
 
 <script>
+import {postKeyValueRequest} from "../utils/api";
+
 export default {
     name: "Login",
     data() {
         return {
             loginForm: {
-                username: "admin",
-                password: "123456"
+                username: 'admin',
+                password: '123456'
             },
             checked: true,
             rules: {
-                username: [{required: true, message: "请输入用户名", trigger: "blur"}],
-                password: [{required: true, message: "请输入密码", trigger: "blur"}]
+                username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                password: [{required: true, message: '请输入密码', trigger: 'blur'}]
             }
         }
     },
@@ -36,9 +38,14 @@ export default {
         loginSubmit() {
             this.$refs.loginForm.validate((valid) => {
                 if (valid) {
-                    alert("submit!")
+                    // alert("submit!")
+                    postKeyValueRequest('/doLogin', this.loginForm).then(response => {
+                        if (response) {
+                            alert(JSON.stringify(response));
+                        }
+                    })
                 } else {
-                    this.$message.error("请输入录入框内容！")
+                    this.$message.error('请输入录入框内容！')
                 }
             })
         }
