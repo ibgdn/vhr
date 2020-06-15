@@ -11,6 +11,12 @@ axios.interceptors.response.use(success => {
     if (success.data.message) {
         Message.success({message: success.data.message})
     }
+
+    // 添加消息提示
+    if (success.data.message) {
+        Message.success({message: success.data.message})
+    }
+
     return success.data;
 }, error => {
     if (error.response.status == 401) {

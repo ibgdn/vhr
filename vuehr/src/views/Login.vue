@@ -44,7 +44,7 @@ export default {
                     this.postKeyValueReq('/doLogin', this.loginForm).then(response => {
                         if (response) {
                             // alert(JSON.stringify(response));
-                            window.sessionStorage.setItem('user', JSON.stringify(response.data));
+                            window.sessionStorage.setItem('user', JSON.stringify(response.object));
                             // replace 跳转之后不可以回退到上一页， push 跳转之后可以回退
                             this.$router.replace('/home');
                         }
