@@ -7,6 +7,12 @@ import Test2 from '../views/Test2'
 
 Vue.use(VueRouter)
 
+// 解决 ElementUI 导航栏中的 vue-router 在3.0版本以上重复点菜单报错问题（路由重复）
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
+
 const routes = [
     {
         path: '/',
