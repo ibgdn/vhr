@@ -15,8 +15,24 @@
                 </el-dropdown>
             </el-header>
             <el-container>
-                <el-aside width="200px">Aside</el-aside>
+                <el-aside width="200px">
+                    <!-- 使用 router 或 @select="menuClick" 完成跳转 -->
+                    <el-menu router>
+                        <el-submenu index="1" v-for="(item,indexI) in this.$router.options.routes" v-if="!item.hidden"
+                                    :key="indexI">
+                            <template slot="title">
+                                <i class="el-icon-location"></i>
+                                <span>{{item.name}}</span>
+                            </template>
+                            <!-- child.path 是变量，需要在前边加冒号 -->
+                            <el-menu-item :index="child.path" v-for="(child, indexJ) in item.children" :key="indexJ">
+                                {{child.name}}
+                            </el-menu-item>
+                        </el-submenu>
+                    </el-menu>
+                </el-aside>
                 <el-main>Main</el-main>
+                <router-view/>
             </el-container>
         </el-container>
     </div>
@@ -49,6 +65,11 @@ export default {
                     });
                 });
             }
+        },
+        menuClick(index, indexPath) {
+            this.$router.push(index);
+            // console.log(index);
+            // console.log(indexPath);
         }
     }
 }
