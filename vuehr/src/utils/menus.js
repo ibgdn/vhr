@@ -44,7 +44,17 @@ export const formatRoutes = (routes) => {
             children: children,
             component(resolve) {
                 // 导入组件
-                require(['../views/' + component + '.vue'], resolve);
+                if (component.startWith("Emp")) {
+                    require(['../views/emp/' + component + '.vue'], resolve);
+                } else if (component.startWith("Per")) {
+                    require(['../views/per/' + component + '.vue'], resolve)
+                } else if (component.startWith("Sal")) {
+                    require(['../views/sal/' + component + '.vue'], resolve)
+                } else if (component.startWith("Sta")) {
+                    require(['../views/sta/' + component + '.vue'], resolve)
+                } else if (component.startWith("Sys")) {
+                    require(['../views/sys/' + component + '.vue'], resolve)
+                }
             }
         }
         fmRoutes.push(fmRouter);
