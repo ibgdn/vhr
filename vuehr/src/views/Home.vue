@@ -5,7 +5,7 @@
                 <div class="title">微人事</div>
                 <el-dropdown class="userInfo" @command="commandHandler">
   <span class="el-dropdown-link">
-      {{user.name}}<i><img :src="user.userface" alt=""></i>
+      {{ user.name }}<i><img :src="user.userface" alt=""></i>
   </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
@@ -17,16 +17,19 @@
             <el-container>
                 <el-aside width="200px">
                     <!-- 使用 router 或 @select="menuClick" 完成跳转 -->
-                    <el-menu router>
-                        <el-submenu index="1" v-for="(item,indexI) in this.$router.options.routes" v-if="!item.hidden"
+                    <!-- unique-opened 一次只打开一个菜单-->
+                    <el-menu router unique-opened>
+                        <!-- <el-submenu index="1" v-for="(item,indexI) in this.$router.options.routes" v-if="!item.hidden" -->
+                        <el-submenu :index="indexI + ''" v-for="(item,indexI) in routes" v-if="!item.hidden"
                                     :key="indexI">
                             <template slot="title">
-                                <i class="el-icon-location"></i>
-                                <span>{{item.name}}</span>
+                                <!-- <i class="el-icon-location"></i> -->
+                                <i style="color: #409eff; margin-right: 5px" :class="item.iconCls"></i>
+                                <span>{{ item.name }}</span>
                             </template>
                             <!-- child.path 是变量，需要在前边加冒号 -->
                             <el-menu-item :index="child.path" v-for="(child, indexJ) in item.children" :key="indexJ">
-                                {{child.name}}
+                                {{ child.name }}
                             </el-menu-item>
                         </el-submenu>
                     </el-menu>
@@ -46,6 +49,11 @@ export default {
             user: JSON.parse(window.sessionStorage.getItem("user"))
         }
     },
+    computed: {
+        routes() {
+            return this.$store.state.routes;
+        }
+    },
     methods: {
         commandHandler(cmd) {
             if (cmd == 'logout') {
@@ -57,6 +65,8 @@ export default {
                     // 请求注销登录，清除记录，跳转登录页
                     this.getJsonReq("/logout");
                     window.sessionStorage.removeItem("user");
+                    // 退出时，清空菜单选项，以便不同用户实时刷新
+                    this.$store.commit('initRoutes', [])
                     this.$router.replace("/")
                 }).catch(() => {
                     this.$message({
@@ -88,7 +98,7 @@ export default {
 .homeHeader .title {
     font-size: 30px;
     font-family: 微软雅黑;
-    color: #ffffff //;
+    color: #ffffff / /;
 }
 
 .homeHeader .userInfo {

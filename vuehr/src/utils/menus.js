@@ -3,6 +3,8 @@ import {getJsonRequest} from "./api";
 export const initMenu = (router, store) => {
     // store/index.js 中的 store
     if (store.state.routes.length > 0) {
+        // 如果 store 有数据，说明是正常跳转，不是用户按刷新（F5）的跳转；
+        // 否则如果是刷新的跳转，那么 store.state.routes.length = 0，将不会走此处逻辑，数据会重新加载。
         return;
     }
 
@@ -44,15 +46,15 @@ export const formatRoutes = (routes) => {
             children: children,
             component(resolve) {
                 // 导入组件
-                if (component.startWith("Emp")) {
+                if (component.startsWith("Emp")) {
                     require(['../views/emp/' + component + '.vue'], resolve);
-                } else if (component.startWith("Per")) {
+                } else if (component.startsWith("Per")) {
                     require(['../views/per/' + component + '.vue'], resolve)
-                } else if (component.startWith("Sal")) {
+                } else if (component.startsWith("Sal")) {
                     require(['../views/sal/' + component + '.vue'], resolve)
-                } else if (component.startWith("Sta")) {
+                } else if (component.startsWith("Sta")) {
                     require(['../views/sta/' + component + '.vue'], resolve)
-                } else if (component.startWith("Sys")) {
+                } else if (component.startsWith("Sys")) {
                     require(['../views/sys/' + component + '.vue'], resolve)
                 }
             }
