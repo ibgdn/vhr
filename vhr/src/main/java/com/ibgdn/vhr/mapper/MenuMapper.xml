@@ -10,7 +10,7 @@
     <result column="iconCls" property="iconCls" jdbcType="VARCHAR" />
     <result column="parentId" property="parentId" jdbcType="INTEGER" />
     <result column="enabled" property="enabled" jdbcType="BIT" />
-      <association property="meta" jdbcType="com.ibgdn.vhr.model.Meta">
+      <association property="meta" javaType="com.ibgdn.vhr.model.Meta">
           <result column="keepAlive" property="keepAlive" jdbcType="BIT"/>
           <result column="requireAuth" property="requireAuth" jdbcType="BIT"/>
       </association>
@@ -30,11 +30,11 @@
       <result column="url2" property="url" jdbcType="VARCHAR"/>
       <result column="path2" property="path" jdbcType="VARCHAR"/>
       <result column="component2" property="component" jdbcType="VARCHAR"/>
-      <result column="name" property="name" jdbcType="VARCHAR"/>
+      <result column="name2" property="name" jdbcType="VARCHAR"/>
       <result column="iconCls2" property="iconCls" jdbcType="VARCHAR"/>
       <result column="parentId2" property="parentId" jdbcType="INTEGER"/>
       <result column="enabled2" property="enabled" jdbcType="BIT"/>
-      <association property="meta" jdbcType="com.ibgdn.vhr.model.Meta">
+      <association property="meta" javaType="com.ibgdn.vhr.model.Meta">
         <result column="keepAlive2" property="keepAlive" jdbcType="BIT"/>
         <result column="requireAuth2" property="requireAuth" jdbcType="BIT"/>
       </association>
