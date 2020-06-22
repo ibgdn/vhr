@@ -34,7 +34,19 @@
                         </el-submenu>
                     </el-menu>
                 </el-aside>
-                <el-main>Main</el-main>
+                <el-main>
+                    <!--非首页展示面包屑导航-->
+                    <el-breadcrumb separator-class="el-icon-arrow-right"
+                                   v-if="this.$router.currentRoute.path != '/home'">
+                        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item><a href="/">{{ this.$router.currentRoute.name }}</a></el-breadcrumb-item>
+                    </el-breadcrumb>
+                    <!--仅首页展示面包屑导航-->
+                    <div class="homeWelcome" v-if="this.$router.currentRoute.path == '/home'">
+                        欢迎来到微人事！
+                    </div>
+                    <router-view/>
+                </el-main>
                 <router-view/>
             </el-container>
         </el-container>
@@ -116,5 +128,13 @@ export default {
     font-size: 18px;
     display: flex;
     align-items: center;
+}
+
+.homeWelcome {
+    text-align: center;
+    font-size: 30px;
+    font-family: 华文行楷, serif;
+    color: #409eff;
+    padding-top: 50px;
 }
 </style>
