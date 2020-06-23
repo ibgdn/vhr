@@ -19,6 +19,7 @@ public class HrService implements UserDetailsService {
         if (hr == null) {
             throw new UsernameNotFoundException("HrName is null");
         }
+        hr.setRoleList(hrMapper.getHrRolesById(hr.getId()));
         return hr;
     }
 }

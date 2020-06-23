@@ -12,4 +12,14 @@ public class HrController {
     public String hr() {
         return "hr";
     }
+
+    @GetMapping("/employee/basic/test")
+    public String employeeBasic() {
+        return "/employee/basic/test";
+    }
+
+    @GetMapping("/employee/advanced/test")
+    public String employeeAdvanced() {
+        return "/employee/advanced/test";
+    }
 }

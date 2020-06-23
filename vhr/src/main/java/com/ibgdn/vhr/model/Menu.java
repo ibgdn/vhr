@@ -23,6 +23,8 @@ public class Menu {
 
     private List<Menu> children;
 
+    private List<Role> roleList;
+
     public Integer getId() {
         return id;
     }
@@ -103,6 +105,14 @@ public class Menu {
         this.children = children;
     }
 
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
     @Override
     public String toString() {
         return "Menu{" +
@@ -112,10 +122,11 @@ public class Menu {
                 ", component='" + component + '\'' +
                 ", name='" + name + '\'' +
                 ", iconCls='" + iconCls + '\'' +
-                ", mate=" + meta +
+                ", meta=" + meta +
                 ", parentId=" + parentId +
                 ", enabled=" + enabled +
                 ", children=" + children +
+                ", roleList=" + roleList +
                 '}';
     }
 }

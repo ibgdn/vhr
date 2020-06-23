@@ -2,9 +2,12 @@ package com.ibgdn.vhr.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Hr implements UserDetails {
     private Integer id;
@@ -26,6 +29,8 @@ public class Hr implements UserDetails {
     private String userface;
 
     private String remark;
+
+    private List<Role> roleList;
 
     public Integer getId() {
         return id;
@@ -99,9 +104,18 @@ public class Hr implements UserDetails {
         this.username = username == null ? null : username.trim();
     }
 
+    /**
+     * 添加 hr 角色
+     *
+     * @return 角色列表
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>(roleList.size());
+        for (Role role : roleList) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
     }
 
     // 生成 json 字符串的时候，统一忽略密码，不推荐
@@ -128,5 +142,30 @@ public class Hr implements UserDetails {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+    @Override
+    public String toString() {
+        return "Hr{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", address='" + address + '\'' +
+                ", enabled=" + enabled +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", userface='" + userface + '\'' +
+                ", remark='" + remark + '\'' +
+                ", roleList=" + roleList +
+                '}';
     }
 }

@@ -25,6 +25,15 @@
     <select id="loadUserByUsername" resultType="com.ibgdn.vhr.model.Hr">
       select * from hr where username = '${username}'
     </select>
+    <select id="getHrRolesById" resultType="com.ibgdn.vhr.model.Role">
+        SELECT
+            r.*
+        FROM
+            role r,
+            hr_role hrr
+        WHERE
+            r.id = hrr.rid AND hrr.hrid = #{id};
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from hr
     where id = #{id,jdbcType=INTEGER}
