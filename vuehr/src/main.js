@@ -30,8 +30,14 @@ router.beforeEach((to, from, next) => {
     if (to.path == '/') {
         next();
     } else {
-        initMenu(router, store);
-        next();
+        if (window.sessionStorage.getItem("user")) {
+            // 如果用户已登录，直接处理请求
+            initMenu(router, store);
+            next();
+        } else {
+            // 如果用户未登录，则跳转登录页面
+            next('/?redirect=' + to.path);
+        }
     }
 })
 

@@ -45,8 +45,10 @@ export default {
                         if (response) {
                             // alert(JSON.stringify(response));
                             window.sessionStorage.setItem('user', JSON.stringify(response.object));
+                            // 获取跳转地址
+                            let path = this.$route.query.redirect;
                             // replace 跳转之后不可以回退到上一页， push 跳转之后可以回退
-                            this.$router.replace('/home');
+                            this.$router.replace((path == '/' || path == undefined) ? '/home' : path);
                         }
                     })
                 } else {
