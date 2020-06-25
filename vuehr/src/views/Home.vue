@@ -47,7 +47,6 @@
                     </div>
                     <router-view/>
                 </el-main>
-                <router-view/>
             </el-container>
         </el-container>
     </div>
