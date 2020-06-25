@@ -1,10 +1,46 @@
 <template>
-    <h1>基础信息设置</h1>
+    <el-tabs v-model="activeName" type="card">
+        <el-tab-pane label="部门管理" name="first">
+            <DepartmentManage></DepartmentManage>
+        </el-tab-pane>
+        <el-tab-pane label="职位管理" name="second">
+            <PositionManage></PositionManage>
+        </el-tab-pane>
+        <el-tab-pane label="职称管理" name="third">
+            <JobLevelManage></JobLevelManage>
+        </el-tab-pane>
+        <el-tab-pane label="奖惩规则" name="fourth">
+            <RewardPunishmentManage></RewardPunishmentManage>
+        </el-tab-pane>
+        <el-tab-pane label="权限组" name="fifth">
+            <PermissionManage></PermissionManage>
+        </el-tab-pane>
+    </el-tabs>
 </template>
 
 <script>
+/*引入组件*/
+import DepartmentManage from "../../components/sys/DepartmentManage";
+import JobLevelManage from "../../components/sys/JobLevelManage";
+import PermissionManage from "../../components/sys/PermissionManage";
+import PositionManage from "../../components/sys/PositionManage";
+import RewardPunishmentManage from "../../components/sys/RewardPunishmentManage";
+
 export default {
-    name: "SysBasic"
+    name: "SysBasic",
+    data() {
+        return {
+            activeName: 'first'
+        }
+    },
+    /*注册组件*/
+    components: {
+        DepartmentManage,
+        JobLevelManage,
+        PermissionManage,
+        PositionManage,
+        RewardPunishmentManage
+    }
 }
 </script>
 
