@@ -1,4 +1,4 @@
-package com.ibgdn.vhr.controller;
+package com.ibgdn.vhr.controller.config;
 
 import com.ibgdn.vhr.model.Menu;
 import com.ibgdn.vhr.service.MenuService;
