@@ -31,17 +31,18 @@
                 <el-table-column
                         prop="name"
                         label="职位名称"
-                        width="120">
+                        width="160">
                 </el-table-column>
                 <el-table-column
                         prop="createDate"
-                        label="创建时间">
+                        label="创建时间"
+                        width="160">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">编辑
+                                @click="showPositionEditDialog(scope.$index, scope.row)">编辑
                         </el-button>
                         <el-button
                                 size="mini"
@@ -52,10 +53,25 @@
                 </el-table-column>
             </el-table>
         </div>
+        <el-dialog
+                title="职位修改"
+                :visible.sync="dialogVisible"
+                width="30%">
+            <div>
+                <el-tag>职位名称：</el-tag>
+                <el-input class="updatePositionInput" size="small" v-model="updatePosition.name"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+                <el-button size="small" type="primary" @click="handleEdit">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import {putJsonRequest} from "../../utils/api";
+
 export default {
     name: "PositionManage",
     data() {
@@ -63,7 +79,11 @@ export default {
             position: {
                 name: ''
             },
-            positions: []
+            positions: [],
+            dialogVisible: false,
+            updatePosition: {
+                name: ''
+            }
         }
     },
     mounted() {
@@ -93,9 +113,23 @@ export default {
                 this.$message.error('职位名称不可以为空');
             }
         },
+        // 显示编辑职位名称对话框
+        showPositionEditDialog(index, data) {
+            // this.updatePosition = data;
+            // 编辑过程中，页面展示名称不随录入框的修改而改变
+            Object.assign(this.updatePosition, data);
+            this.dialogVisible = true;
+        },
         // 编辑按钮
-        handleEdit(index, data) {
-
+        handleEdit() {
+            putJsonRequest("/system/basic/position/", this.updatePosition).then(response => {
+                if (response) {
+                    this.initPositions();
+                    this.updatePosition.name = '';
+                    // 隐藏对话框
+                    this.dialogVisible = false;
+                }
+            })
         },
         // 删除按钮
         handleDelete(index, data) {
@@ -104,7 +138,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.deleteJsonReq('/system/basic/position/' + data.id).then(response => {
+                this.deleteJsonReq("/system/basic/position/" + data.id).then(response => {
                     if (response) {
                         this.initPositions();
                     }
@@ -128,5 +162,10 @@ export default {
 
 .positionManageTable {
     margin-top: 10px;
+}
+
+.updatePositionInput {
+    width: 200px;
+    margin-left: 10px;
 }
 </style>
