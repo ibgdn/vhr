@@ -2,7 +2,6 @@ package com.ibgdn.vhr.service;
 
 import com.ibgdn.vhr.mapper.PositionMapper;
 import com.ibgdn.vhr.model.Position;
-import com.ibgdn.vhr.model.ResponseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

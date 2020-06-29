@@ -1,7 +1,6 @@
 package com.ibgdn.vhr.mapper;
 
 import com.ibgdn.vhr.model.Position;
-import com.ibgdn.vhr.model.ResponseBean;
 
 import java.util.List;
 
