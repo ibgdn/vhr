@@ -1,18 +1,18 @@
 <template>
     <el-tabs v-model="activeName" type="card">
-        <el-tab-pane label="部门管理" name="first">
+        <el-tab-pane label="部门管理" name="DepartmentManage">
             <DepartmentManage></DepartmentManage>
         </el-tab-pane>
-        <el-tab-pane label="职位管理" name="second">
+        <el-tab-pane label="职位管理" name="PositionManage">
             <PositionManage></PositionManage>
         </el-tab-pane>
-        <el-tab-pane label="职称管理" name="third">
+        <el-tab-pane label="职称管理" name="JobLevelManage">
             <JobLevelManage></JobLevelManage>
         </el-tab-pane>
-        <el-tab-pane label="奖惩规则" name="fourth">
+        <el-tab-pane label="奖惩规则" name="RewardPunishmentManage">
             <RewardPunishmentManage></RewardPunishmentManage>
         </el-tab-pane>
-        <el-tab-pane label="权限组" name="fifth">
+        <el-tab-pane label="权限组" name="PermissionManage">
             <PermissionManage></PermissionManage>
         </el-tab-pane>
     </el-tabs>
@@ -30,7 +30,7 @@ export default {
     name: "SysBasic",
     data() {
         return {
-            activeName: 'first'
+            activeName: 'JobLevelManage'
         }
     },
     /*注册组件*/
