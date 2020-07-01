@@ -23,6 +23,12 @@
     delete from position
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deletePositionsByIds">
+    DELETE FROM position WHERE id IN
+    <foreach collection="ids" item="id" open="(" separator="," close=")">
+        #{id}
+    </foreach>
+  </delete>
   <insert id="insert" parameterType="com.ibgdn.vhr.model.Position" >
     insert into position (id, name, createDate, 
       enabled)

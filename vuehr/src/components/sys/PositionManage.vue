@@ -14,6 +14,7 @@
         </div>
         <div class="positionManageTable">
             <el-table
+                    @selection-change="handleSelectionChange"
                     :data="positions"
                     size="small"
                     border
@@ -52,6 +53,9 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-button type="danger" size="small" style="margin-top: 8px" @click="deleteSelected"
+                       :disabled="multipleSelection.length == 0">批量删除
+            </el-button>
         </div>
         <el-dialog
                 title="职位修改"
@@ -83,7 +87,8 @@ export default {
             dialogVisible: false,
             updatePosition: {
                 name: ''
-            }
+            },
+            multipleSelection: []
         }
     },
     mounted() {
@@ -139,6 +144,35 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.deleteJsonReq("/system/basic/position/" + data.id).then(response => {
+                    if (response) {
+                        this.initPositions();
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        // 勾选内容变动调用方法
+        handleSelectionChange(val) {
+            console.log(val);
+            this.multipleSelection = val;
+        },
+        // 删除所有勾选内容
+        deleteSelected() {
+            this.$confirm('此操作将永久删除【' + this.multipleSelection.length + '】条职位记录, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let ids = '?';
+                this.multipleSelection.forEach(item => {
+                   ids += 'ids=' + item.id + '&';
+                })
+                console.log(ids);
+                this.deleteJsonReq("/system/basic/position/" + ids).then(response => {
                     if (response) {
                         this.initPositions();
                     }

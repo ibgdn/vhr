@@ -69,4 +69,18 @@ public class PositionController {
         }
         return ResponseBean.error(JSONUtils.toJSONString(id) + " 职位删除失败！");
     }
+
+    /**
+     * 批量删除职位信息
+     *
+     * @param ids 需要删除职位的 id
+     * @return ResponseBean 删除职位执行结果
+     */
+    @DeleteMapping("/")
+    public ResponseBean deletePositionsByIds(Integer[] ids) {
+        if (positionService.deletePositionsByIds(ids) == ids.length) {
+            return ResponseBean.ok("所选职位删除成功！");
+        }
+        return ResponseBean.error(JSONUtils.toJSONString(ids) + " 职位删除失败！");
+    }
 }
