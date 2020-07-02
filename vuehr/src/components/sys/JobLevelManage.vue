@@ -50,8 +50,8 @@
                         label="是否启用"
                         width="160">
                     <template slot-scope="scope">
-                        <el-tag type="success" v-if="scope.row.enabled">已启用</el-tag>
-                        <el-tag type="danger" v-else>未启用</el-tag>
+                        <el-tag size="small" type="success" v-if="scope.row.enabled">已启用</el-tag>
+                        <el-tag size="small" type="danger" v-else>未启用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -108,7 +108,7 @@
                         </td>
                         <td>
                             <el-switch v-model="updatedJobLevel.enabled"
-                                       active-text="启用" inactive-text="未启用">
+                                       active-text="启用" inactive-text="禁用">
                             </el-switch>
                         </td>
                     </tr>

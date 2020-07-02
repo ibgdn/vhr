@@ -39,6 +39,14 @@
                         label="创建时间"
                         width="160">
                 </el-table-column>
+                <el-table-column
+                        label="是否启用"
+                        width="160">
+                    <template slot-scope="scope">
+                        <el-tag size="small" type="success" v-if="scope.row.enabled">已启用</el-tag>
+                        <el-tag size="small" type="danger" v-else>未启用</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
@@ -65,6 +73,11 @@
                 <el-tag>职位名称：</el-tag>
                 <el-input class="updatePositionInput" size="small" v-model="updatePosition.name"></el-input>
             </div>
+            <div>
+                <el-tag>是否启用：</el-tag>
+                <el-switch size="small" v-model="updatePosition.enabled" active-text="启用"
+                           inactive-text="禁用"></el-switch>
+            </div>
             <span slot="footer" class="dialog-footer">
                 <el-button size="small" @click="dialogVisible = false">取 消</el-button>
                 <el-button size="small" type="primary" @click="handleEdit">确 定</el-button>
@@ -86,7 +99,8 @@ export default {
             positions: [],
             dialogVisible: false,
             updatePosition: {
-                name: ''
+                name: '',
+                enabled: false
             },
             multipleSelection: []
         }
@@ -168,7 +182,7 @@ export default {
             }).then(() => {
                 let ids = '?';
                 this.multipleSelection.forEach(item => {
-                   ids += 'ids=' + item.id + '&';
+                    ids += 'ids=' + item.id + '&';
                 })
                 this.deleteJsonReq("/system/basic/position/" + ids).then(response => {
                     if (response) {
