@@ -24,6 +24,12 @@
     delete from joblevel
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteJobLevelsByIds">
+    DELETE FROM JOBLEVEL WHERE ID IN
+    <foreach collection="ids" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
   <insert id="insert" parameterType="com.ibgdn.vhr.model.JobLevel" >
     insert into joblevel (id, name, titleLevel, 
       createDate, enabled)

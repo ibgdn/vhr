@@ -16,6 +16,7 @@
         </div>
         <div style="margin-top: 10px">
             <el-table
+                    @selection-change="handleSelectionChange"
                     :data="jobLevels"
                     size="small"
                     border
@@ -67,6 +68,9 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-button type="danger" size="small" style="margin-top: 8px" @click="deleteSelected"
+                       :disabled="multipleSelection.length == 0">批量删除
+            </el-button>
         </div>
         <el-dialog
                 title="职称修改"
@@ -140,7 +144,8 @@ export default {
                 name: '',
                 titleLevel: '',
                 enabled: false
-            }
+            },
+            multipleSelection: []
         }
     },
     // mounted 方法
@@ -196,6 +201,33 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.deleteJsonReq("/system/basic/jobLevel/" + data.id).then(response => {
+                    if (response) {
+                        this.initJobLevels();
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+        // 勾选内容变动调用方法
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+        },
+        // 删除所有勾选内容
+        deleteSelected() {
+            this.$confirm('此操作将永久删除【' + this.multipleSelection.length + '】条职称记录, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                let ids = '?';
+                this.multipleSelection.forEach(item => {
+                    ids += 'ids=' + item.id + '&';
+                })
+                this.deleteJsonReq("/system/basic/jobLevel/" + ids).then(response => {
                     if (response) {
                         this.initJobLevels();
                     }

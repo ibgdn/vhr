@@ -157,7 +157,6 @@ export default {
         },
         // 勾选内容变动调用方法
         handleSelectionChange(val) {
-            console.log(val);
             this.multipleSelection = val;
         },
         // 删除所有勾选内容
@@ -171,7 +170,6 @@ export default {
                 this.multipleSelection.forEach(item => {
                    ids += 'ids=' + item.id + '&';
                 })
-                console.log(ids);
                 this.deleteJsonReq("/system/basic/position/" + ids).then(response => {
                     if (response) {
                         this.initPositions();

@@ -5,10 +5,8 @@ import com.ibgdn.vhr.model.JobLevel;
 import com.ibgdn.vhr.model.ResponseBean;
 import com.ibgdn.vhr.service.JobLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,5 +68,19 @@ public class JobLevelController {
             return ResponseBean.ok("职称删除成功！");
         }
         return ResponseBean.error(JSONUtils.toJSONString(id) + " 职称删除失败！");
+    }
+
+    /**
+     * 批量删除职称信息
+     *
+     * @param ids 批量删除职称的 id
+     * @return ResponseBean 删除职称执行结果
+     */
+    @DeleteMapping("/")
+    public ResponseBean deleteJobLevels(Integer[] ids) {
+        if (jobLevelService.deleteJobLevelsByIds(ids) == ids.length) {
+            return ResponseBean.ok("所选职称删除成功！");
+        }
+        return ResponseBean.error(JSONUtils.toJSONString(ids) + " 职称删除失败！");
     }
 }
