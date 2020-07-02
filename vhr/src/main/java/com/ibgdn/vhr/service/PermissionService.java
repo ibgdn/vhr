@@ -1,0 +1,21 @@
+package com.ibgdn.vhr.service;
+
+import com.ibgdn.vhr.mapper.RoleMapper;
+import com.ibgdn.vhr.model.Role;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * 权限管理 Service
+ */
+@Service
+public class PermissionService {
+    @Autowired
+    RoleMapper roleMapper;
+
+    public List<Role> getAllRoles() {
+        return roleMapper.getAllRoles();
+    }
+}
