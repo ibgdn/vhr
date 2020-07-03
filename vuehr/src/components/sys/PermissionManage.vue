@@ -8,7 +8,7 @@
             <el-button size="small" type="primary" icon="el-icon-plus">添加角色</el-button>
         </div>
         <div class="permissionManageCollapse">
-            <el-collapse accordion>
+            <el-collapse accordion @change="changeRoleShowMenus">
                 <el-collapse-item :title="r.nameZh" :name="r.id" v-for="(r, indexRoles) in roles" :key="indexRoles">
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
@@ -16,7 +16,9 @@
                             <el-button style="float: right; padding: 3px 0;color: #ff0000" icon="el-icon-delete"
                                        type="text"></el-button>
                         </div>
-                        <div></div>
+                        <div>
+                            <el-tree show-checkbox :data="allMenus" :props="defaultProps"></el-tree>
+                        </div>
                     </el-card>
                 </el-collapse-item>
             </el-collapse>
@@ -36,7 +38,13 @@ export default {
                 nameZh: ''
             },
             // 获取所有角色
-            roles: []
+            roles: [],
+            // 各个角色下的所有菜单树展示项
+            allMenus: [],
+            defaultProps: {
+                children: 'children',
+                label: 'name'
+            }
         }
     },
     mounted() {
@@ -49,6 +57,18 @@ export default {
                     this.roles = response;
                 }
             })
+        },
+        initRoleMenus() {
+            getJsonRequest("/system/basic/permission/menus/").then(response => {
+                if (response) {
+                    this.allMenus = response;
+                }
+            })
+        },
+        changeRoleShowMenus(name) {
+            if (name) {
+                this.initRoleMenus();
+            }
         }
     }
 }

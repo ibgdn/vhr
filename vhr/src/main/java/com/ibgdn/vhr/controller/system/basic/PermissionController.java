@@ -1,7 +1,9 @@
 package com.ibgdn.vhr.controller.system.basic;
 
+import com.ibgdn.vhr.model.Menu;
 import com.ibgdn.vhr.model.Role;
-import com.ibgdn.vhr.service.PermissionService;
+import com.ibgdn.vhr.service.MenuService;
+import com.ibgdn.vhr.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +18,28 @@ import java.util.List;
 @RequestMapping("/system/basic/permission")
 public class PermissionController {
     @Autowired
-    PermissionService permissionService;
+    RoleService roleService;
 
+    @Autowired
+    MenuService menuService;
+
+    /**
+     * 获取所有角色信息
+     *
+     * @return 角色信息
+     */
     @GetMapping("/")
     public List<Role> getAllRoles() {
-        return permissionService.getAllRoles();
+        return roleService.getAllRoles();
+    }
+
+    /**
+     * 获取当前角色下的所有菜单选项
+     *
+     * @return 当前角色下的所有菜单选项
+     */
+    @GetMapping("/menus")
+    public List<Menu> getAllMenus() {
+        return menuService.getAllMenus();
     }
 }
