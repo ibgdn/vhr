@@ -22,8 +22,8 @@ Vue.prototype.deleteJsonReq = deleteJsonRequest;
 // 封装请求方法 end
 
 Vue.config.productionTip = false
-
-Vue.use(ElementUI);
+// 全局添加 ElementUI 控件，并配置所有控件默认尺寸为 “small“
+Vue.use(ElementUI, {size: 'small'});
 
 // 导航守卫，类似于过滤器链
 router.beforeEach((to, from, next) => {

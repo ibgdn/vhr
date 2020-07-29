@@ -1,13 +1,12 @@
 package com.ibgdn.vhr.controller.system.basic;
 
 import com.ibgdn.vhr.model.Menu;
+import com.ibgdn.vhr.model.ResponseBean;
 import com.ibgdn.vhr.model.Role;
 import com.ibgdn.vhr.service.MenuService;
 import com.ibgdn.vhr.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,5 +40,31 @@ public class PermissionController {
     @GetMapping("/menus")
     public List<Menu> getAllMenus() {
         return menuService.getAllMenus();
+    }
+
+    /**
+     * 根据角色 id 获取菜单权限
+     *
+     * @param rid RoleId
+     * @return 角色的菜单权限
+     */
+    @GetMapping("/menuIds/{rid}")
+    public List<Integer> getMenuIdsByRid(@PathVariable Integer rid) {
+        return menuService.getMenuIdsByRid(rid);
+    }
+
+    /**
+     * 更新不同角色的菜单信息
+     *
+     * @param rid     RoleId
+     * @param menuIds 菜单 id
+     * @return ResponseBean 接口调用情况
+     */
+    @PutMapping("/")
+    public ResponseBean updateRoleMenus(Integer rid, Integer[] menuIds) {
+        if (menuService.updateRoleMenus(rid, menuIds)) {
+            return ResponseBean.ok("根据角色 id 更新菜单权限操作成功！");
+        }
+        return ResponseBean.error("根据角色 id 更新菜单权限操作成功！");
     }
 }

@@ -8,7 +8,7 @@
             <el-button size="small" type="primary" icon="el-icon-plus">添加角色</el-button>
         </div>
         <div class="permissionManageCollapse">
-            <el-collapse accordion @change="changeRoleShowMenus">
+            <el-collapse accordion @change="changeRoleShowMenus" v-model="activeName">
                 <el-collapse-item :title="r.nameZh" :name="r.id" v-for="(r, indexRoles) in roles" :key="indexRoles">
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
@@ -17,7 +17,13 @@
                                        type="text"></el-button>
                         </div>
                         <div>
-                            <el-tree show-checkbox :data="allMenus" :props="defaultProps"></el-tree>
+                            <el-tree show-checkbox node-key="id" :default-checked-keys="selectedMenus" ref="tree"
+                                     :data="allMenus"
+                                     :props="defaultProps"></el-tree>
+                            <div style="display: flex;justify-content: flex-end">
+                                <el-button @click="updateCancel">取消</el-button>
+                                <el-button type="primary" @click="menusUpdate(r.id, indexRoles)">确认</el-button>
+                            </div>
                         </div>
                     </el-card>
                 </el-collapse-item>
@@ -44,7 +50,10 @@ export default {
             defaultProps: {
                 children: 'children',
                 label: 'name'
-            }
+            },
+            // 默认所有标签都不打开
+            activeName: -1,
+            selectedMenus: []
         }
     },
     mounted() {
@@ -65,10 +74,37 @@ export default {
                 }
             })
         },
-        changeRoleShowMenus(name) {
-            if (name) {
+        changeRoleShowMenus(rid) {
+            if (rid) {
                 this.initRoleMenus();
+                this.initSelectedMenus(rid);
             }
+        },
+        // 获取不同角色菜单权限
+        initSelectedMenus(rid) {
+            this.getJsonReq("/system/basic/permission/menuIds/" + rid).then(response => {
+                if (response) {
+                    this.selectedMenus = response;
+                }
+            })
+        },
+        updateCancel() {
+            this.activeName = -1;
+        },
+        menusUpdate(rid, index) {
+            let tree = this.$refs.tree[index];
+            // true 排除非叶子节点
+            let checkedKeys = tree.getCheckedKeys(true);
+            let url = "/system/basic/permission/?rid=" + rid;
+            checkedKeys.forEach(key => {
+                url += "&menuIds=" + key;
+            })
+            this.putJsonReq(url).then(response => {
+                if (response) {
+                    this.initRoles();
+                    this.activeName = -1;
+                }
+            })
         }
     }
 }

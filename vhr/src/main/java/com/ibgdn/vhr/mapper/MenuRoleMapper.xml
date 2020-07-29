@@ -10,7 +10,7 @@
     id, mid, rid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from menu_role
     where id = #{id,jdbcType=INTEGER}
@@ -19,7 +19,10 @@
     delete from menu_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.ibgdn.vhr.model.MenuRole" >
+    <delete id="deleteByRid">
+        DELETE FROM menu_role WHERE rid = #{rid}
+    </delete>
+    <insert id="insert" parameterType="com.ibgdn.vhr.model.MenuRole" >
     insert into menu_role (id, mid, rid)
     values (#{id,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER})
   </insert>
@@ -47,6 +50,12 @@
         #{rid,jdbcType=INTEGER},
       </if>
     </trim>
+  </insert>
+  <insert id="insertRoleMenus">
+    INSERT INTO menu_role (mid, rid) VALUES
+    <foreach collection="menuIds" item="mid" separator=",">
+      (#{mid},#{rid})
+    </foreach>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ibgdn.vhr.model.MenuRole" >
     update menu_role

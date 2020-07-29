@@ -114,7 +114,10 @@
             AND m3.enabled = TRUE
     ORDER BY m1.id , m2.id , m3.id;
   </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <select id="getMenuIdsByRid" resultType="java.lang.Integer">
+    SELECT mid FROM menu_role WHERE rid = #{rid}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from menu
     where id = #{id,jdbcType=INTEGER}
   </delete>
