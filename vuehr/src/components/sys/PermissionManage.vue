@@ -4,8 +4,9 @@
             <el-input size="small" placeholder="请输入要添加的角色英文名称" v-model="role.name">
                 <template slot="prepend">ROLE_</template>
             </el-input>
-            <el-input size="small" placeholder="请输入要添加的角色中文名称" v-model="role.nameZh"></el-input>
-            <el-button size="small" type="primary" icon="el-icon-plus">添加角色</el-button>
+            <el-input size="small" placeholder="请输入要添加的角色中文名称" v-model="role.nameZh"
+                      @keydown.enter.native="addRole"></el-input>
+            <el-button size="small" type="primary" icon="el-icon-plus" @click="addRole">添加角色</el-button>
         </div>
         <div class="permissionManageCollapse">
             <el-collapse accordion @change="changeRoleShowMenus" v-model="activeName">
@@ -18,6 +19,7 @@
                         </div>
                         <div>
                             <el-tree show-checkbox node-key="id" :default-checked-keys="selectedMenus" ref="tree"
+                                     :key="indexRoles"
                                      :data="allMenus"
                                      :props="defaultProps"></el-tree>
                             <div style="display: flex;justify-content: flex-end">
@@ -88,9 +90,11 @@ export default {
                 }
             })
         },
+        // 取消角色权限菜单修改
         updateCancel() {
             this.activeName = -1;
         },
+        // 执行角色权限菜单修改
         menusUpdate(rid, index) {
             let tree = this.$refs.tree[index];
             // true 排除非叶子节点
@@ -101,10 +105,23 @@ export default {
             })
             this.putJsonReq(url).then(response => {
                 if (response) {
-                    this.initRoles();
                     this.activeName = -1;
                 }
             })
+        },
+        // 添加用户角色
+        addRole() {
+            if (this.role.name && this.role.nameZh) {
+                this.postJsonReq("/system/basic/permission/role", this.role).then(response => {
+                    if (response) {
+                        this.role.name = '';
+                        this.role.nameZh = '';
+                        this.initRoles();
+                    }
+                });
+            } else {
+                this.$message.error('请完善角色需要添加的数据！');
+            }
         }
     }
 }

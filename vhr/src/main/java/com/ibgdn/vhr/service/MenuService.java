@@ -57,4 +57,5 @@ public class MenuService {
         Integer result = roleMenusMapper.insertRoleMenus(rid, menuIds);
         return result == menuIds.length;
     }
+
 }

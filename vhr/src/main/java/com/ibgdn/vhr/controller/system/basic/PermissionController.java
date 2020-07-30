@@ -67,4 +67,18 @@ public class PermissionController {
         }
         return ResponseBean.error("根据角色 id 更新菜单权限操作成功！");
     }
+
+    /**
+     * 添加用户角色
+     *
+     * @param role 用户角色
+     * @return 请求处理结果
+     */
+    @PostMapping("/role")
+    public ResponseBean addRole(@RequestBody Role role) {
+        if (roleService.addRole(role) == 1) {
+            return ResponseBean.ok("添加角色成功！");
+        }
+        return ResponseBean.error("添加角色失败！");
+    }
 }
