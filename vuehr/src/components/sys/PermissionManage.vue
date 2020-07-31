@@ -15,6 +15,7 @@
                         <div slot="header" class="clearfix">
                             <span>可访问的资源</span>
                             <el-button style="float: right; padding: 3px 0;color: #ff0000" icon="el-icon-delete"
+                                       @click="deleteRole(r)"
                                        type="text"></el-button>
                         </div>
                         <div>
@@ -122,6 +123,25 @@ export default {
             } else {
                 this.$message.error('请完善角色需要添加的数据！');
             }
+        },
+        // 删除已有角色
+        deleteRole(role) {
+            this.$confirm('此操作将永久删除【' + role.nameZh + '】, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.deleteJsonReq("/system/basic/permission/role/" + role.id).then(response => {
+                    if (response) {
+                        this.initRoles();
+                    }
+                })
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
         }
     }
 }

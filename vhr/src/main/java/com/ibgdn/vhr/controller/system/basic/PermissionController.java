@@ -81,4 +81,18 @@ public class PermissionController {
         }
         return ResponseBean.error("添加角色失败！");
     }
+
+    /**
+     * 删除角色
+     *
+     * @param rid 角色 id
+     * @return ResponseBean 是否操作成功
+     */
+    @DeleteMapping("/role/{rid}")
+    public ResponseBean deleteRoleById(@PathVariable Integer rid) {
+        if (roleService.deleteRoleById(rid) == 1) {
+            return ResponseBean.ok("删除角色成功！");
+        }
+        return ResponseBean.error("删除角色失败！");
+    }
 }
