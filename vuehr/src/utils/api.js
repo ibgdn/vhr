@@ -21,6 +21,7 @@ axios.interceptors.response.use(success => {
 }, error => {
     if (error.response.status == 401) {
         Message.error({message: error.response.data.message ? error.response.data.message : '用户尚未登录'})
+        // 服务重启或是 session 过期后，修改返回状态，用户需要重新登录
         router.replace('/');
     } else if (error.response.status == 403) {
         Message.error({message: '权限不足，请联系管理员'})

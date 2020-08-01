@@ -130,6 +130,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 解决未登录访问接口时，重定向的问题，直接返回错误提示即可
                 .exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json;charset=utf-8");
+                    // 服务重启或是 session 过期后，修改返回状态，用户需要重新登录
+                    response.setStatus(401);
                     PrintWriter writer = response.getWriter();
                     ResponseBean responseBean = ResponseBean.error("访问失败！");
                     if (authException instanceof InsufficientAuthenticationException) {
