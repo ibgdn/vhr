@@ -30,7 +30,7 @@ export default {
     name: "SysBasic",
     data() {
         return {
-            activeName: 'PermissionManage'
+            activeName: 'DepartmentManage'
         }
     },
     /*注册组件*/
