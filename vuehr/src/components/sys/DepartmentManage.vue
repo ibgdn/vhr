@@ -10,7 +10,27 @@
             :data="departments"
             :props="defaultProps"
             :filter-node-method="filterNode"
+            :expand-on-click-node="false"
             ref="tree">
+            <span class="custom-tree-node" slot-scope="{ node, data }">
+                <span>{{ data.name }}</span>
+                <span>
+                    <el-button
+                        class="departmentBtn"
+                        type="primary"
+                        size="mini"
+                        @click="() => showAddDepartmentView(data)">
+                        添加部门
+                    </el-button>
+                    <el-button
+                        class="departmentBtn"
+                        type="danger"
+                        size="mini"
+                        @click="() => deleteDepartment(data)">
+                        删除部门
+                    </el-button>
+                </span>
+            </span>
         </el-tree>
     </div>
 </template>
@@ -54,10 +74,26 @@ export default {
                 }
             })
         },
+        // 展示添加部门信息的对话框
+        showAddDepartmentView(data) {
+            console.log(data);
+        },
+        // 删除部门
+        deleteDepartment(data) {
+            console.log(data);
+        },
     }
 }
 </script>
 
-<style scoped>
+<style>
+.departmentBtn {
+    padding: 2px;
+}
 
+.custom-tree-node {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 </style>
