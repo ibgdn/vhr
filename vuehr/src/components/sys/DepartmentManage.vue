@@ -32,6 +32,33 @@
                 </span>
             </span>
         </el-tree>
+        <el-dialog
+            title="添加部门"
+            :visible.sync="dialogVisible"
+            width="30%">
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <el-tag>上级部门</el-tag>
+                        </td>
+                        <td>{{ depParentName }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <el-tag>待添加部门名称</el-tag>
+                        </td>
+                        <td>
+                            <el-input v-model="department.name" placeholder="请输入要添加的部门名称"></el-input>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addDepartment">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -48,7 +75,16 @@ export default {
             defaultProps: {
                 children: 'departmentChildren',
                 label: 'name'
-            }
+            },
+            // 添加部门的弹出窗口默认不可见
+            dialogVisible: false,
+            // 部门信息
+            department: {
+                name: '',
+                parentId: -1
+            },
+            // 上级部门名称
+            depParentName: '',
         }
     },
     watch: {
@@ -76,7 +112,37 @@ export default {
         },
         // 展示添加部门信息的对话框
         showAddDepartmentView(data) {
-            console.log(data);
+            this.depParentName = data.name;
+            this.department.parentId = data.id;
+            this.dialogVisible = true;
+        },
+        // 清除部门添加弹窗信息
+        clearAddDepartmentDialog() {
+            this.department = {
+                name: '',
+                parentId: -1
+            };
+            this.depParentName = '';
+        },
+        // 添加部门后自动切换到对应部门父级（不折叠）
+        addDepartment2Departments(departments, object) {
+            for (let i = 0; i < departments.length; i++) {
+                let department = departments[i];
+                if (department.id === object.parentId) {
+                    department.departmentChildren = department.departmentChildren.concat(object);
+                    return;
+                } else {
+                    this.addDepartment2Departments(department.departmentChildren, object);
+                }
+            }
+        },
+        // 添加部门
+        addDepartment() {
+            this.postJsonReq("/system/basic/department/", this.department).then(response => {
+                this.addDepartment2Departments(this.departments, response.object);
+                this.dialogVisible = false;
+                this.clearAddDepartmentDialog();
+            })
         },
         // 删除部门
         deleteDepartment(data) {

@@ -1,5 +1,6 @@
 package com.ibgdn.vhr.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Department {
@@ -15,7 +16,9 @@ public class Department {
 
     private Boolean isParent;
 
-    private List<Department> departmentChildren;
+    private List<Department> departmentChildren = new ArrayList<>();
+
+    private Integer result;
 
     public Integer getId() {
         return id;
@@ -73,6 +76,14 @@ public class Department {
         this.departmentChildren = departmentChildren;
     }
 
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
+
     @Override
     public String toString() {
         return "Department{" +
@@ -83,6 +94,7 @@ public class Department {
                 ", enabled=" + enabled +
                 ", isParent=" + isParent +
                 ", departmentChildren=" + departmentChildren +
+                ", result=" + result +
                 '}';
     }
 }

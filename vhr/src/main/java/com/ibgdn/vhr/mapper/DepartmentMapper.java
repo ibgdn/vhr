@@ -18,4 +18,6 @@ public interface DepartmentMapper {
     int updateByPrimaryKey(Department record);
 
     List<Department> getAllDepartmentsByParentId(Integer pid);
+
+    void addDepartment(Department department);
 }
