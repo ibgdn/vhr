@@ -41,4 +41,20 @@ public class DepartmentController {
         }
         return ResponseBean.error("部门添加失败！", department);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseBean deleteDepartment(@PathVariable Integer id) {
+        Department department = new Department();
+        department.setId(id);
+        departmentService.deleteDepartmentById(department);
+        Integer result = department.getResult();
+        if (result == -2) {
+            return ResponseBean.error("该部门下有子部门，删除失败！");
+        } else if (result == -1) {
+            return ResponseBean.error("该部门下有员工，删除失败！");
+        } else if (result == 1) {
+            return ResponseBean.ok("部门删除成功！");
+        }
+        return ResponseBean.error("部门删除失败！");
+    }
 }

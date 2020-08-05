@@ -46,4 +46,41 @@ public class DepartmentService {
         department.setEnabled(true);
         departmentMapper.addDepartment(department);
     }
+
+    /**
+     * 删除部门的存储过程：
+     <p>
+        DELIMITER $$
+
+        CREATE DEFINER=`vhr`@`%` PROCEDURE `deleteDep`(in did int,out result int)
+
+        begin
+            declare ecount int;
+            declare pid int;
+            declare pcount int;
+            declare a int;
+            # 获取没有子部门的部门
+            select count(*) into a from department where id=did and isParent=false;
+            if a=0 then set result=-2;
+            else
+                # 查看当前部门是否有业务员
+                select count(*) into ecount from employee where departmentId=did;
+                if ecount>0 then set result=-1;
+                else
+                    select parentId into pid from department where id=did;
+                    delete from department where id=did and isParent=false;
+                    select row_count() into result;
+                    select count(*) into pcount from department where parentId=pid;
+                    if pcount=0 then update department set isParent=false where id=pid;
+                    end if;
+                end if;
+            end if;
+        end $$
+
+        DELIMITER ;
+     </p>
+     */
+    public void deleteDepartmentById(Department department) {
+        departmentMapper.deleteDepartmentById(department);
+    }
 }

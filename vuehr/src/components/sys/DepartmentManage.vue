@@ -105,7 +105,6 @@ export default {
         initDepartments() {
             this.getJsonReq("/system/basic/department/").then(response => {
                 if (response) {
-                    console.log(response);
                     this.departments = response;
                 }
             })
@@ -146,7 +145,42 @@ export default {
         },
         // 删除部门
         deleteDepartment(data) {
-            console.log(data);
+            if (data.parent) {
+                this.$message.error("该部门" + data.name + "存在子部门，删除失败");
+            } else {
+                this.$confirm('此操作将永久删除【' + data.name + '】部门, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.deleteJsonReq("/system/basic/department/" + data.id).then(response => {
+                        if (response) {
+                            this.removeDepartmentFromDepartments(null, this.departments, data.id);
+                        }
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            }
+        },
+        // 在当前目录树中移除已经删除的部门
+        removeDepartmentFromDepartments(part, departments, id) {
+            for (let i = 0; i < departments.length; i++) {
+                let department = departments[i];
+                if (department.id === id) {
+                    // 从索引 i 的位置，删除1个
+                    departments.splice(i, 1);
+                    if (departments.length === 0) {
+                        part.parent = false;
+                    }
+                    return;
+                } else {
+                    this.removeDepartmentFromDepartments(department, department.departmentChildren, id);
+                }
+            }
         },
     }
 }
