@@ -1,6 +1,5 @@
 package com.ibgdn.vhr.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +25,7 @@ public class Hr implements UserDetails {
 
     private String password;
 
-    private String userface;
+    private String userFace;
 
     private String remark;
 
@@ -128,12 +127,12 @@ public class Hr implements UserDetails {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getUserface() {
-        return userface;
+    public String getUserFace() {
+        return userFace;
     }
 
-    public void setUserface(String userface) {
-        this.userface = userface == null ? null : userface.trim();
+    public void setUserFace(String userFace) {
+        this.userFace = userFace == null ? null : userFace.trim();
     }
 
     public String getRemark() {
@@ -163,7 +162,7 @@ public class Hr implements UserDetails {
                 ", enabled=" + enabled +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", userface='" + userface + '\'' +
+                ", userface='" + userFace + '\'' +
                 ", remark='" + remark + '\'' +
                 ", roleList=" + roleList +
                 '}';
