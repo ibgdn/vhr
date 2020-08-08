@@ -24,6 +24,7 @@
                         <div>用户状态：
                             <el-switch
                                 v-model="hr.enabled"
+                                @change="enableChange(hr)"
                                 active-text="启用"
                                 active-color="green"
                                 inactive-text="禁用"
@@ -31,7 +32,7 @@
                             </el-switch>
                         </div>
                         <div>用户角色：
-                            <el-tag type="success" stype="margin-right: 2px" v-for="(role, roleIndex) in hr.roleList"
+                            <el-tag type="success" style="margin-right: 4px" v-for="(role, roleIndex) in hr.roleList"
                                     :key="roleIndex">{{ role.nameZh }}
                             </el-tag>
                             <el-button icon="el-icon-more" type="text"></el-button>
@@ -58,14 +59,24 @@ export default {
         this.initHrs();
     },
     methods: {
+        // 初始化操作员信息
         initHrs() {
             this.getJsonReq("/system/hr/").then(response => {
                 if (response) {
-                    console.log(response);
                     this.hrs = response;
                 }
             });
-        }
+        },
+        // 操作员用户状态切换
+        enableChange(hr) {
+            delete hr.roleList;
+            this.putJsonReq("/system/hr/", hr).then(response => {
+                if (response) {
+                    // 正常更新数据后重新刷新数据
+                    this.initHrs();
+                }
+            });
+        },
     },
 }
 </script>

@@ -15,9 +15,9 @@
   </resultMap>
   <resultMap id="HrWithRoles" type="com.ibgdn.vhr.model.Hr" extends="BaseResultMap">
     <collection property="roleList" ofType="com.ibgdn.vhr.model.Role">
-      <id column="id" property="id"/>
-      <result column="name" property="name"/>
-      <result column="nameZh" property="nameZh"/>
+      <id column="rid" property="id"/>
+      <result column="rname" property="name"/>
+      <result column="rnameZh" property="nameZh"/>
     </collection>
   </resultMap>
   <sql id="Base_Column_List" >

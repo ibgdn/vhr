@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * hr Controller
  */
-@RestController
+//@RestController
 public class HrController {
     @GetMapping("/hr")
     public String hr() {

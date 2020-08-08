@@ -29,4 +29,8 @@ public class HrService implements UserDetailsService {
     public List<Hr> getAllHrs() {
         return hrMapper.getAllHrs(HrUtils.getCurrentHr().getId());
     }
+
+    public Integer updateHr(Hr hr) {
+        return hrMapper.updateByPrimaryKeySelective(hr);
+    }
 }
