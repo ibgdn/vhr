@@ -10,7 +10,7 @@
     id, hrid, rid
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from hr_role
     where id = #{id,jdbcType=INTEGER}
@@ -19,7 +19,16 @@
     delete from hr_role
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.ibgdn.vhr.model.HrRole" >
+    <delete id="deleteByHrId">
+        DELETE FROM hr_role WHERE hrid = #{hrId}
+    </delete>
+    <insert id="addRoles">
+        INSERT INTO hr_role (hrid, rid) VALUES
+        <foreach collection="rolesId" item="roleId" separator=",">
+            (#{hrId}, #{roleId})
+        </foreach>
+    </insert>
+    <insert id="insert" parameterType="com.ibgdn.vhr.model.HrRole" >
     insert into hr_role (id, hrid, rid
       )
     values (#{id,jdbcType=INTEGER}, #{hrid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER}
