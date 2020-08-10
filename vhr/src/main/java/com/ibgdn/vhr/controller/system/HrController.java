@@ -29,8 +29,8 @@ public class HrController {
      * @return 操作员信息
      */
     @GetMapping("/")
-    public List<Hr> getAllHrs() {
-        return hrService.getAllHrs();
+    public List<Hr> getAllHrs(String keywords) {
+        return hrService.getAllHrs(keywords);
     }
 
     /**

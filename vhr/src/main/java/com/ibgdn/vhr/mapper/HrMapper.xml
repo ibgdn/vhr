@@ -50,6 +50,9 @@
             LEFT JOIN role r ON hrr.rid = r.id
         WHERE
             hr.id != #{hrId}
+            <if test="keywords != null">
+                AND hr.name LIKE CONCAT('%', #{keywords}, '%')
+            </if>
         ORDER BY hr.id;
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

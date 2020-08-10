@@ -2,8 +2,8 @@
     <div>
         <div class="searchDiv">
             <el-input v-model="keywords" placeholder="搜索用户名获取用户" prefix-icon="el-icon-search"
-                      class="searchInput"></el-input>
-            <el-button icon="el-icon-search" type="primary">搜索</el-button>
+                      class="searchInput" @keydown.enter.native="keywordsSearch"></el-input>
+            <el-button icon="el-icon-search" type="primary" @click="keywordsSearch">搜索</el-button>
         </div>
         <div class="hrContainer">
             <el-card class="hrCard" v-for="(hr, hrIndex) in hrs" :key="hrIndex">
@@ -84,7 +84,7 @@ export default {
     methods: {
         // 初始化操作员信息
         initHrs() {
-            this.getJsonReq("/system/hr/").then(response => {
+            this.getJsonReq("/system/hr/?keywords=" + this.keywords).then(response => {
                 if (response) {
                     this.hrs = response;
                 }
@@ -154,6 +154,10 @@ export default {
                     }
                 });
             }
+        },
+        // 搜索框
+        keywordsSearch() {
+            this.initHrs();
         },
     },
 }
