@@ -71,4 +71,19 @@ public class HrController {
         }
         return ResponseBean.error("操作员角色更新失败！");
     }
+
+    /**
+     * 根据 hrId 删除操作员
+     *
+     * @param id 操作员 Id
+     * @return 删除操作员情况
+     */
+    @DeleteMapping("/{id}")
+    public ResponseBean deleteHrById(@PathVariable Integer id) {
+        Integer integer = hrService.deleteHrById(id);
+        if (integer == 1) {
+            return ResponseBean.ok("删除操作员成功！");
+        }
+        return ResponseBean.error("删除操作员失败！");
+    }
 }
