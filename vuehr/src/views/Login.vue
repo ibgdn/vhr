@@ -1,6 +1,10 @@
 <template>
     <div>
-        <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+        <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer"
+                 v-loading="loading"
+                 element-loading-text="登录中。。。"
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(0, 0, 0, 0.8)">
             <h3 class="loginTitle">系统登录</h3>
             <el-form-item prop="username">
                 <el-input size="normal" type="text" v-model="loginForm.username" auto-complete="off"
@@ -31,7 +35,9 @@ export default {
             rules: {
                 username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
                 password: [{required: true, message: '请输入密码', trigger: 'blur'}]
-            }
+            },
+            // 等待，默认不加载
+            loading: false,
         }
     },
     methods: {
@@ -41,7 +47,9 @@ export default {
                     // alert("submit!")
                     // postKeyValueRequest('/doLogin', this.loginForm).then(response => {
                     // 封装请求对象，不再需要 import 导入，直接使用 this 调用
+                    this.loading = true;
                     this.postKeyValueReq('/doLogin', this.loginForm).then(response => {
+                        this.loading = false;
                         if (response) {
                             // alert(JSON.stringify(response));
                             window.sessionStorage.setItem('user', JSON.stringify(response.object));

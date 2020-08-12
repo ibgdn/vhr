@@ -21,7 +21,11 @@
                     size="small"
                     border
                     stripe
-                    style="width: 70%">
+                    style="width: 70%"
+                    v-loading="loading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)">
                 <el-table-column
                         type="selection"
                         width="55">
@@ -145,7 +149,9 @@ export default {
                 titleLevel: '',
                 enabled: false
             },
-            multipleSelection: []
+            multipleSelection: [],
+            // 等待，默认不加载
+            loading: false,
         }
     },
     // mounted 方法
@@ -156,7 +162,9 @@ export default {
     methods: {
         // 初始化职级
         initJobLevels() {
+            this.loading = true;
             this.getJsonReq("/system/basic/jobLevel/").then(response => {
+                this.loading = false;
                 if (response) {
                     this.jobLevels = response;
                 }

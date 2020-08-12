@@ -6,7 +6,11 @@
                       placeholder="请输入要添加职位名称"
                       prefix-icon="el-icon-plus"
                       @keydown.enter.native="addPosition()"
-                      v-model="position.name">
+                      v-model="position.name"
+                      v-loading="loading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(0, 0, 0, 0.8)">
             </el-input>
             <el-button icon="el-icon-plus" size="small" type="primary" @click="addPosition">
                 添加
@@ -102,7 +106,9 @@ export default {
                 name: '',
                 enabled: false
             },
-            multipleSelection: []
+            multipleSelection: [],
+            // 等待，默认不加载
+            loading: false,
         }
     },
     mounted() {
@@ -112,7 +118,9 @@ export default {
     methods: {
         // 初始化时调用该方法
         initPositions() {
+            this.loading = true;
             this.getJsonReq("/system/basic/position/").then(response => {
+                this.loading = false;
                 if (response) {
                     this.positions = response;
                 }

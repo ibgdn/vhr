@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div     v-loading="globalLoading"
+             element-loading-text="拼命加载中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.8)">
         <div class="permissionManageInput">
             <el-input size="small" placeholder="请输入要添加的角色英文名称" v-model="role.name">
                 <template slot="prepend">ROLE_</template>
@@ -9,7 +12,11 @@
             <el-button size="small" type="primary" icon="el-icon-plus" @click="addRole">添加角色</el-button>
         </div>
         <div class="permissionManageCollapse">
-            <el-collapse accordion @change="changeRoleShowMenus" v-model="activeName">
+            <el-collapse accordion @change="changeRoleShowMenus" v-model="activeName"
+                         v-loading="loading"
+                         element-loading-text="拼命加载中"
+                         element-loading-spinner="el-icon-loading"
+                         element-loading-background="rgba(0, 0, 0, 0.8)">
                 <el-collapse-item :title="r.nameZh" :name="r.id" v-for="(r, indexRoles) in roles" :key="indexRoles">
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
@@ -56,7 +63,10 @@ export default {
             },
             // 默认所有标签都不打开
             activeName: -1,
-            selectedMenus: []
+            selectedMenus: [],
+            // 加载，默认不展示
+            loading: false,
+            globalLoading: false,
         }
     },
     mounted() {
@@ -64,7 +74,9 @@ export default {
     },
     methods: {
         initRoles() {
+            this.loading = true;
             getJsonRequest("/system/basic/permission/").then(response => {
+                this.loading = false;
                 if (response) {
                     this.roles = response;
                 }
@@ -113,7 +125,9 @@ export default {
         // 添加用户角色
         addRole() {
             if (this.role.name && this.role.nameZh) {
+                this.globalLoading = true;
                 this.postJsonReq("/system/basic/permission/role", this.role).then(response => {
+                    this.globalLoading = false;
                     if (response) {
                         this.role.name = '';
                         this.role.nameZh = '';
