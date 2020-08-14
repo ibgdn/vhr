@@ -2,6 +2,8 @@ package com.ibgdn.vhr.mapper;
 
 import com.ibgdn.vhr.model.Employee;
 
+import java.util.List;
+
 public interface EmployeeMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +16,8 @@ public interface EmployeeMapper {
     int updateByPrimaryKeySelective(Employee record);
 
     int updateByPrimaryKey(Employee record);
+
+    List<Employee> getEmployeeByPage(Integer start, Integer size);
+
+    Long getTotal();
 }
