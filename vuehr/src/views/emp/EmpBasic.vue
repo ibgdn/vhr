@@ -50,7 +50,7 @@
                     prop="birthday"
                     label="出生日期"
                     align="left"
-                    width="95">
+                    width="150">
                 </el-table-column>
                 <el-table-column
                     prop="idCard"
@@ -137,13 +137,13 @@
                 </el-table-column>
                 <el-table-column
                     prop="beginDate"
-                    label="入职时间"
+                    label="入职日期"
                     align="left"
-                    width="95">
+                    width="150">
                 </el-table-column>
                 <el-table-column
                     prop="conversionTime"
-                    label="转正时间"
+                    label="转正日期"
                     align="left"
                     width="150">
                 </el-table-column>
@@ -151,7 +151,13 @@
                     prop="beginContract"
                     label="合同起始日期"
                     align="left"
-                    width="95">
+                    width="150">
+                </el-table-column>
+                <el-table-column
+                    prop="endContract"
+                    label="合同截止日期"
+                    align="left"
+                    width="150">
                 </el-table-column>
                 <el-table-column
                     label="合同期限"
@@ -167,16 +173,10 @@
                     label="操作"
                     width="200">
                     <template slot-scope="scope">
-                        <el-button>编辑</el-button>
-                        <el-button>查看高级资料</el-button>
-                        <el-button>删除</el-button>
+                        <el-button class="functionButton" size="mini">编辑</el-button>
+                        <el-button class="functionButton" size="mini" type="primary">查看高级资料</el-button>
+                        <el-button class="functionButton" size="mini" type="danger">删除</el-button>
                     </template>
-                </el-table-column>
-                <el-table-column
-                    prop="conversionTime"
-                    label="转正时间"
-                    align="left"
-                    width="150">
                 </el-table-column>
             </el-table>
         </div>
@@ -194,10 +194,27 @@ export default {
             employees: [],
 
         }
+    },
+    mounted() {
+        this.initEmployees();
+    },
+    methods: {
+        // 初始化职员信息数据
+        initEmployees() {
+            this.loading = true;
+            this.getJsonReq("/emp/basic/").then(response => {
+                this.loading = false;
+                if (response) {
+                    this.employees = response.data;
+                }
+            });
+        },
     }
 }
 </script>
 
 <style scoped>
-
+.functionButton {
+    padding: 3px;
+}
 </style>
