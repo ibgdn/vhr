@@ -179,6 +179,14 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div style="display: flex;justify-content: flex-end">
+                <el-pagination
+                    background
+                    @current-change="currentChange"
+                    @size-change="sizeChange"
+                    layout="sizes,prev,pager,next,jumper,->,total,slot"
+                    :total="total"></el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -192,7 +200,12 @@ export default {
             loading: false,
             // 员工
             employees: [],
-
+            // 员工总量
+            total: 0,
+            // 页码
+            page: 1,
+            // 每页显示条数
+            size: 10,
         }
     },
     mounted() {
@@ -202,12 +215,23 @@ export default {
         // 初始化职员信息数据
         initEmployees() {
             this.loading = true;
-            this.getJsonReq("/emp/basic/").then(response => {
+            this.getJsonReq("/emp/basic/?page=" + this.page + "&size=" + this.size).then(response => {
                 this.loading = false;
                 if (response) {
                     this.employees = response.data;
+                    this.total = response.total;
                 }
             });
+        },
+        // 页码切换
+        currentChange(currentPage) {
+            this.page = currentPage;
+            this.initEmployees();
+        },
+        // 每页显示数量切换
+        sizeChange(pageSize) {
+            this.size = pageSize;
+            this.initEmployees();
         },
     }
 }
