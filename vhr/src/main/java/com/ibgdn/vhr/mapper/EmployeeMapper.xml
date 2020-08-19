@@ -72,10 +72,16 @@
         employee e, nation n, politicsstatus pol, department d, joblevel j, position pos
     WHERE
         e.nationid = n.id AND e.politicId = pol.id AND e.departmentId = d.id AND e.jobLevelId = j.id AND e.posId = pos.id
+        <if test="keyword != null and keyword != ''">
+            AND e.name LIKE concat('%', #{keyword}, '%')
+        </if>
         LIMIT #{start},#{size}
   </select>
   <select id="getTotal" resultType="java.lang.Long">
     SELECT count(*) FROM employee
+    <if test="keyword != null and keyword != ''">
+        WHERE name LIKE concat('%', #{keyword}, '%')
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from employee

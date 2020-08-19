@@ -16,14 +16,14 @@ public class EmployeeService {
     @Autowired
     EmployeeMapper employeeMapper;
 
-    public ResponsePageBean getEmployeeByPage(Integer page, Integer size) {
+    public ResponsePageBean getEmployeeByPage(Integer page, Integer size, String keyword) {
         int start = 0;
         if (page != null && size != null) {
             start = (page - 1) * size;
         }
 
-        List<Employee> data = employeeMapper.getEmployeeByPage(start, size);
-        Long total = employeeMapper.getTotal();
+        List<Employee> data = employeeMapper.getEmployeeByPage(start, size, keyword);
+        Long total = employeeMapper.getTotal(keyword);
 
         ResponsePageBean responsePageBean = new ResponsePageBean();
         responsePageBean.setData(data);
