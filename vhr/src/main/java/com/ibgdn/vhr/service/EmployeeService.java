@@ -28,7 +28,11 @@ public class EmployeeService {
         ResponsePageBean responsePageBean = new ResponsePageBean();
         responsePageBean.setData(data);
         responsePageBean.setTotal(total);
-        
+
         return responsePageBean;
+    }
+
+    public Integer addEmployee(Employee employee) {
+        return employeeMapper.insertSelective(employee);
     }
 }
