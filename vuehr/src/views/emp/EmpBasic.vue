@@ -77,7 +77,7 @@
                     width="80">
                 </el-table-column>
                 <el-table-column
-                    prop="politicsstatus.name"
+                    prop="politicsStatus.name"
                     label="政治面貌">
                 </el-table-column>
                 <el-table-column
@@ -223,8 +223,8 @@
                             <el-form-item label="政治面貌：" prop="politicId">
                                 <el-select size="mini" style="width: 200px" v-model="employee.politicId"
                                            placeholder="请选择政治面貌">
-                                    <el-option v-for="item in options">
-
+                                    <el-option v-for="item in politicsStatus" :key="politicsStatus.id"
+                                               :label="politicsStatus.name" :value="politicsStatus.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -235,8 +235,8 @@
                             <el-form-item label="民族：" prop="nationId">
                                 <el-select size="mini" style="width: 150px" v-model="employee.nationId"
                                            placeholder="请选择民族">
-                                    <el-option v-for="item in options">
-
+                                    <el-option v-for="item in nations" :key="item.id" :label="item.name"
+                                               :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -275,8 +275,8 @@
                             <el-form-item label="职称：" prop="jobLevelId">
                                 <el-select size="mini" style="width: 120px" v-model="employee.jobLevelId"
                                            placeholder="请选择职称">
-                                    <el-option v-for="item in options">
-
+                                    <el-option v-for="item in jobLevels" :key="jobLevels.id" :label="jobLevels.name"
+                                               :value="jobLevels.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -439,10 +439,17 @@ export default {
             dialogVisible: false,
             // 政治面貌
             options: [],
+            // 民族
+            nations: [],
+            // 职位
+            jobLevels: [],
+            // 政治面貌
+            politicsStatus: [],
         }
     },
     mounted() {
         this.initEmployees();
+        this.initData();
     },
     methods: {
         // 初始化职员信息数据
@@ -470,6 +477,30 @@ export default {
         showAddEmployeeView() {
             this.dialogVisible = true;
         },
+        // 添加员工信息时初始化下拉框数据
+        initData() {
+            if (!window.sessionStorage.getItem("nations")) {
+                this.getJsonReq("/emp/basic/nations").then(response => {
+                    this.nations = response;
+                });
+            }
+
+            if (!window.sessionStorage.getItem("jobLevels")) {
+                this.getJsonReq("/emp/basic/jobLevels").then(response => {
+                    console.log(response);
+                    this.jobLevels = response;
+                    console.log(this.jobLevels);
+                });
+            }
+
+            if (!window.sessionStorage.getItem("politicsStatus")) {
+                this.getJsonReq("/emp/basic/politicsStatus").then(response => {
+                    console.log(response);
+                    this.politicsStatus = response;
+                    console.log(this.politicsStatus)
+                });
+            }
+        }
     }
 }
 </script>

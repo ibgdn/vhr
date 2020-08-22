@@ -1,11 +1,14 @@
 package com.ibgdn.vhr.controller.employee;
 
-import com.ibgdn.vhr.model.Employee;
-import com.ibgdn.vhr.model.ResponseBean;
-import com.ibgdn.vhr.model.ResponsePageBean;
+import com.ibgdn.vhr.model.*;
 import com.ibgdn.vhr.service.EmployeeService;
+import com.ibgdn.vhr.service.JobLevelService;
+import com.ibgdn.vhr.service.NationService;
+import com.ibgdn.vhr.service.PoliticsStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 【员工资料】=》【基本资料】
@@ -16,6 +19,15 @@ public class EmpBasicController {
 
     @Autowired
     EmployeeService employeeService;
+
+    @Autowired
+    NationService nationService;
+
+    @Autowired
+    JobLevelService jobLevelService;
+   
+    @Autowired
+    PoliticsStatusService politicsStatusService;
 
     /**
      * 根据页码获取一页员工信息
@@ -43,5 +55,35 @@ public class EmpBasicController {
             return ResponseBean.ok("添加员工成功！");
         }
         return ResponseBean.error("添加员工失败！");
+    }
+
+    /**
+     * 获取所有民族名称
+     *
+     * @return 民族
+     */
+    @GetMapping("/nations")
+    public List<Nation> getAllNations() {
+        return nationService.getAllNations();
+    }
+
+    /**
+     * 获取所有的职称
+     *
+     * @return 职称
+     */
+    @GetMapping("/jobLevels")
+    public List<JobLevel> getAllJobLevel() {
+        return jobLevelService.getAllJobLevels();
+    }
+
+    /**
+     * 获取所有的政治面貌选项
+     *
+     * @return 政治面貌
+     */
+    @GetMapping("/politicsStatus")
+    public List<Politicsstatus> getAllPoliticsStatus() {
+        return politicsStatusService.getAllPoliticsStatus();
     }
 }
