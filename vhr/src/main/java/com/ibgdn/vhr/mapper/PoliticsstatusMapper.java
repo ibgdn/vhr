@@ -1,21 +1,21 @@
 package com.ibgdn.vhr.mapper;
 
-import com.ibgdn.vhr.model.Politicsstatus;
+import com.ibgdn.vhr.model.PoliticsStatus;
 
 import java.util.List;
 
 public interface PoliticsstatusMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Politicsstatus record);
+    int insert(PoliticsStatus record);
 
-    int insertSelective(Politicsstatus record);
+    int insertSelective(PoliticsStatus record);
 
-    Politicsstatus selectByPrimaryKey(Integer id);
+    PoliticsStatus selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Politicsstatus record);
+    int updateByPrimaryKeySelective(PoliticsStatus record);
 
-    int updateByPrimaryKey(Politicsstatus record);
+    int updateByPrimaryKey(PoliticsStatus record);
 
-    List<Politicsstatus> getAllPoliticsStatus();
+    List<PoliticsStatus> getAllPoliticsStatus();
 }

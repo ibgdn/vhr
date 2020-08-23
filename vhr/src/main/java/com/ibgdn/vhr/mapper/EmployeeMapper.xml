@@ -48,7 +48,7 @@
       <id column="nid" property="id"/>
       <result column="nname" property="name"/>
     </association>
-    <association property="politicsstatus" javaType="com.ibgdn.vhr.model.Politicsstatus">
+    <association property="politicsStatus" javaType="com.ibgdn.vhr.model.PoliticsStatus">
       <id column="polid" property="id"/>
       <result column="polname" property="name"/>
     </association>
@@ -67,7 +67,7 @@
   </resultMap>
   <select id="getEmployeeByPage" resultMap="AllEmployeeInfo">
     SELECT
-        e.*, pol.id pid, pol.name pname, n.id nid, n.name nname, d.id did, d.name dname, j.id jid, j.name jname, pos.id posId, pos.name posname
+        e.*, pol.id polId, pol.name polName, n.id nid, n.name nname, d.id did, d.name dname, j.id jid, j.name jname, pos.id posId, pos.name posname
     FROM
         employee e, nation n, politicsstatus pol, department d, joblevel j, position pos
     WHERE

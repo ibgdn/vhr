@@ -127,7 +127,7 @@
                     width="80">
                 </el-table-column>
                 <el-table-column
-                    prop="speciality"
+                    prop="specialty"
                     label="专业"
                     align="left"
                     width="150">
@@ -223,8 +223,8 @@
                             <el-form-item label="政治面貌：" prop="politicId">
                                 <el-select size="mini" style="width: 200px" v-model="employee.politicId"
                                            placeholder="请选择政治面貌">
-                                    <el-option v-for="item in politicsStatus" :key="politicsStatus.id"
-                                               :label="politicsStatus.name" :value="politicsStatus.id">
+                                    <el-option v-for="item in politicsStatus" :key="item.id"
+                                               :label="item.name" :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -265,8 +265,8 @@
                             <el-form-item label="职位：" prop="posId">
                                 <el-select size="mini" style="width: 150px" v-model="employee.posId"
                                            placeholder="请选择职位">
-                                    <el-option v-for="item in options">
-
+                                    <el-option v-for="item in positions" :key="item.id" :label="item.name"
+                                               :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -275,8 +275,8 @@
                             <el-form-item label="职称：" prop="jobLevelId">
                                 <el-select size="mini" style="width: 120px" v-model="employee.jobLevelId"
                                            placeholder="请选择职称">
-                                    <el-option v-for="item in jobLevels" :key="jobLevels.id" :label="jobLevels.name"
-                                               :value="jobLevels.id">
+                                    <el-option v-for="item in jobLevels" :key="item.id" :label="item.name"
+                                               :value="item.id">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -297,7 +297,7 @@
                     <el-row>
                         <el-col :span="6">
                             <el-form-item label="工号：" prop="workID">
-                                <el-input size="mini" style="width: 150px" v-model="employee.workID"
+                                <el-input size="mini" style="width: 150px" v-model="employee.workId"
                                           prefix-icon="el-icon-edit" aria-placeholder="工号"></el-input>
                             </el-form-item>
                         </el-col>
@@ -305,8 +305,7 @@
                             <el-form-item label="学历：" prop="tipTopDegree">
                                 <el-select size="mini" style="width: 120px" v-model="employee.tipTopDegree"
                                            placeholder="请选择学历">
-                                    <el-option v-for="item in options">
-
+                                    <el-option v-for="item in tipTopDegrees" :key="item" :label="item" :value="item">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -427,7 +426,7 @@ export default {
                 school: "深圳大学",
                 beginDate: "2017-12-31 10:00:00",
                 workState: "在职",
-                workID: "00000087",
+                workId: "00000087",
                 contractTerm: 2,
                 conversionTime: "2018-03-30 09:00:00",
                 notworkDate: null,
@@ -442,9 +441,13 @@ export default {
             // 民族
             nations: [],
             // 职位
+            positions: [],
+            // 职称
             jobLevels: [],
             // 政治面貌
             politicsStatus: [],
+            // 学历
+            tipTopDegrees: ['本科', '大专', '硕士', '博士', '高中', '初中', '小学', '其他'],
         }
     },
     mounted() {
@@ -475,32 +478,41 @@ export default {
         },
         // 添加员工弹出框
         showAddEmployeeView() {
+            this.initPosition();
             this.dialogVisible = true;
         },
         // 添加员工信息时初始化下拉框数据
         initData() {
+            // 民族
             if (!window.sessionStorage.getItem("nations")) {
                 this.getJsonReq("/emp/basic/nations").then(response => {
                     this.nations = response;
                 });
             }
 
+            // 职称
             if (!window.sessionStorage.getItem("jobLevels")) {
                 this.getJsonReq("/emp/basic/jobLevels").then(response => {
-                    console.log(response);
                     this.jobLevels = response;
-                    console.log(this.jobLevels);
                 });
             }
 
+            // 政治面貌
             if (!window.sessionStorage.getItem("politicsStatus")) {
                 this.getJsonReq("/emp/basic/politicsStatus").then(response => {
-                    console.log(response);
                     this.politicsStatus = response;
-                    console.log(this.politicsStatus)
                 });
             }
-        }
+        },
+        // 初始化职位
+        initPosition() {
+            // 职位
+            if (!window.sessionStorage.getItem("positions")) {
+                this.getJsonReq("/emp/basic/position").then(response => {
+                    this.positions = response;
+                });
+            }
+        },
     }
 }
 </script>

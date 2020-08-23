@@ -1,10 +1,7 @@
 package com.ibgdn.vhr.controller.employee;
 
 import com.ibgdn.vhr.model.*;
-import com.ibgdn.vhr.service.EmployeeService;
-import com.ibgdn.vhr.service.JobLevelService;
-import com.ibgdn.vhr.service.NationService;
-import com.ibgdn.vhr.service.PoliticsStatusService;
+import com.ibgdn.vhr.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +22,12 @@ public class EmpBasicController {
 
     @Autowired
     JobLevelService jobLevelService;
-   
+
     @Autowired
     PoliticsStatusService politicsStatusService;
+
+    @Autowired
+    PositionService positionService;
 
     /**
      * 根据页码获取一页员工信息
@@ -68,6 +68,16 @@ public class EmpBasicController {
     }
 
     /**
+     * 获取所有职位数据
+     *
+     * @return 职位
+     */
+    @GetMapping("/position")
+    public List<Position> getAllPositions() {
+        return positionService.getAllPositions();
+    }
+
+    /**
      * 获取所有的职称
      *
      * @return 职称
@@ -83,7 +93,7 @@ public class EmpBasicController {
      * @return 政治面貌
      */
     @GetMapping("/politicsStatus")
-    public List<Politicsstatus> getAllPoliticsStatus() {
+    public List<PoliticsStatus> getAllPoliticsStatus() {
         return politicsStatusService.getAllPoliticsStatus();
     }
 }

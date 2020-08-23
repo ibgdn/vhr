@@ -69,7 +69,7 @@ public class Employee {
 
     private Nation nation;
 
-    private Politicsstatus politicsstatus;
+    private PoliticsStatus politicsStatus;
 
     private Department department;
 
@@ -309,12 +309,12 @@ public class Employee {
         this.nation = nation;
     }
 
-    public Politicsstatus getPoliticsstatus() {
-        return politicsstatus;
+    public PoliticsStatus getPoliticsStatus() {
+        return politicsStatus;
     }
 
-    public void setPoliticsstatus(Politicsstatus politicsstatus) {
-        this.politicsstatus = politicsstatus;
+    public void setPoliticsStatus(PoliticsStatus politicsStatus) {
+        this.politicsStatus = politicsStatus;
     }
 
     public Department getDepartment() {
@@ -373,7 +373,7 @@ public class Employee {
                 ", endContract=" + endContract +
                 ", workAge=" + workAge +
                 ", nation=" + nation +
-                ", politicsstatus=" + politicsstatus +
+                ", politicsstatus=" + politicsStatus +
                 ", department=" + department +
                 ", jobLevel=" + jobLevel +
                 ", position=" + position +
