@@ -8,6 +8,10 @@ public class ResponseBean {
     private String message;
     private Object object;
 
+    public static ResponseBean build() {
+        return new ResponseBean();
+    }
+
     public static ResponseBean ok(String message) {
         return new ResponseBean(200, message, null);
     }
@@ -37,24 +41,27 @@ public class ResponseBean {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public ResponseBean setStatus(Integer status) {
         this.status = status;
+        return this;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public ResponseBean setMessage(String message) {
         this.message = message;
+        return this;
     }
 
     public Object getObject() {
         return object;
     }
 
-    public void setObject(Object object) {
+    public ResponseBean setObject(Object object) {
         this.object = object;
+        return this;
     }
 
     @Override

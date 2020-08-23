@@ -12,7 +12,7 @@
             <div>
                 <el-button type="success"><i class="fa fa-level-up" aria-hidden="true"></i>导入数据</el-button>
                 <el-button type="success"><i class="fa fa-level-down" aria-hidden="true"></i>导出数据</el-button>
-                <el-button type="primary"><i class="el-icon-plus" aria-hidden="true" @click="showAddEmployeeView"></i>添加用户
+                <el-button type="primary" @click="showAddEmployeeView"><i class="el-icon-plus" aria-hidden="true"></i>添加用户
                 </el-button>
             </div>
         </div>
@@ -297,8 +297,8 @@
                     <el-row>
                         <el-col :span="6">
                             <el-form-item label="工号：" prop="workID">
-                                <el-input size="mini" style="width: 150px" v-model="employee.workId"
-                                          prefix-icon="el-icon-edit" aria-placeholder="工号"></el-input>
+                                <el-input size="mini" style="width: 150px" disabled v-model="employee.workId"
+                                          aria-placeholder="工号"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="5">
@@ -446,7 +446,7 @@ export default {
             jobLevels: [],
             // 政治面貌
             politicsStatus: [],
-            // 学历
+            // 学历（数据库使用枚举类型，前端直接展示静态数据）
             tipTopDegrees: ['本科', '大专', '硕士', '博士', '高中', '初中', '小学', '其他'],
         }
     },
@@ -479,6 +479,7 @@ export default {
         // 添加员工弹出框
         showAddEmployeeView() {
             this.initPosition();
+            this.getMaxWorkId();
             this.dialogVisible = true;
         },
         // 添加员工信息时初始化下拉框数据
@@ -513,6 +514,14 @@ export default {
                 });
             }
         },
+        // 获取最小可用 workId
+        getMaxWorkId() {
+            this.getJsonReq("/emp/basic/maxWorkId").then(response => {
+                if (response) {
+                    this.employee.workId = response.object;
+                }
+            });
+        }
     }
 }
 </script>

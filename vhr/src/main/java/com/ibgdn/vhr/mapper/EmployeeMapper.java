@@ -20,4 +20,6 @@ public interface EmployeeMapper {
     List<Employee> getEmployeeByPage(Integer start, Integer size, String keyword);
 
     Long getTotal(String keyword);
+
+    Integer getMaxWorkId();
 }

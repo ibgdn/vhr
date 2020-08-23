@@ -83,6 +83,9 @@
         WHERE name LIKE concat('%', #{keyword}, '%')
     </if>
   </select>
+  <select id="getMaxWorkId" resultType="java.lang.Integer">
+    SELECT max(workId) FROM employee
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from employee
     where id = #{id,jdbcType=INTEGER}

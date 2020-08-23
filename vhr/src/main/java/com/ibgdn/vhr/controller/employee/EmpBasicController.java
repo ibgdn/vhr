@@ -96,4 +96,16 @@ public class EmpBasicController {
     public List<PoliticsStatus> getAllPoliticsStatus() {
         return politicsStatusService.getAllPoliticsStatus();
     }
+
+    /**
+     * 新增员工时，返回最小可用工号
+     *
+     * @return 最大工号
+     */
+    @GetMapping("/maxWorkId")
+    public ResponseBean getMaxWorkId() {
+        ResponseBean responseBean = ResponseBean.build().setStatus(200)
+                .setObject(String.format("%08d", employeeService.getMaxWorkId()));
+        return responseBean;
+    }
 }
