@@ -194,7 +194,7 @@
         <el-dialog
             title="添加员工"
             :visible.sync="dialogVisible"
-            width="90%">
+            width="55%">
             <div>
                 <el-form>
                     <el-row>
@@ -283,8 +283,14 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="所属部门：" prop="departmentId">
-                                <el-input size="mini" style="width: 150px" v-model="employee.departmentId"
-                                          prefix-icon="el-icon-edit" aria-placeholder="请输入所属部门"></el-input>
+                                <el-popover placement="right" title="请选择部门" width="200" trigger="manual"
+                                            v-model="popVisible">
+                                    <el-tree default-expand-all :data="allDepartments" :props="departmentProps"
+                                             @node-click="handleNodeClick"></el-tree>
+                                    <div slot="reference" class="departmentSelectDiv"
+                                         @click="showDepartmentsView">{{ selectedDepartment }}
+                                    </div>
+                                </el-popover>
                             </el-form-item>
                         </el-col>
                         <el-col :span="7">
@@ -448,6 +454,17 @@ export default {
             politicsStatus: [],
             // 学历（数据库使用枚举类型，前端直接展示静态数据）
             tipTopDegrees: ['本科', '大专', '硕士', '博士', '高中', '初中', '小学', '其他'],
+            // 部门弹出框是否可见
+            popVisible: false,
+            // 所有部门
+            allDepartments: [],
+            // 部门弹窗目录树
+            departmentProps: {
+                children: 'departmentChildren',
+                label: 'name'
+            },
+            // 新增员工的部门
+            selectedDepartment: '',
         }
     },
     mounted() {
@@ -488,21 +505,46 @@ export default {
             if (!window.sessionStorage.getItem("nations")) {
                 this.getJsonReq("/emp/basic/nations").then(response => {
                     this.nations = response;
+                    window.sessionStorage.setItem("nations", JSON.stringify(response));
                 });
+            } else {
+                this.nations = JSON.parse(window.sessionStorage.getItem("nations"));
             }
 
             // 职称
             if (!window.sessionStorage.getItem("jobLevels")) {
                 this.getJsonReq("/emp/basic/jobLevels").then(response => {
-                    this.jobLevels = response;
+                    if (response) {
+                        this.jobLevels = response;
+                        window.sessionStorage.setItem("jobLevels", JSON.stringify(response));
+                    }
                 });
+            } else {
+                this.jobLevels = JSON.parse(window.sessionStorage.getItem("jobLevels"));
             }
 
             // 政治面貌
             if (!window.sessionStorage.getItem("politicsStatus")) {
                 this.getJsonReq("/emp/basic/politicsStatus").then(response => {
-                    this.politicsStatus = response;
+                    if (response) {
+                        this.politicsStatus = response;
+                        window.sessionStorage.setItem("politicsStatus", JSON.stringify(response));
+                    }
                 });
+            } else {
+                this.politicsStatus = JSON.parse(window.sessionStorage.getItem("politicsStatus"));
+            }
+
+            // 部门
+            if (!window.sessionStorage.getItem("departments")) {
+                this.getJsonReq("/emp/basic/departments").then(response => {
+                    if (response) {
+                        this.allDepartments = response;
+                        window.sessionStorage.setItem("departments", JSON.stringify(response));
+                    }
+                });
+            } else {
+                this.allDepartments = JSON.parse(window.sessionStorage.getItem("departments"));
             }
         },
         // 初始化职位
@@ -521,6 +563,16 @@ export default {
                     this.employee.workId = response.object;
                 }
             });
+        },
+        // 员工添加页面获取部门目录树
+        showDepartmentsView() {
+            this.popVisible = !this.popVisible;
+        },
+        // 部门目录树点击事件
+        handleNodeClick(data) {
+            this.employee.departmentId = data.id;
+            this.selectedDepartment = data.name;
+            this.popVisible = !this.popVisible;
         }
     }
 }
@@ -529,5 +581,18 @@ export default {
 <style scoped>
 .functionButton {
     padding: 3px;
+}
+
+.departmentSelectDiv {
+    display: inline-flex;
+    width: 150px;
+    height: 26px;
+    border: 1px solid #dedede;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    align-items: center;
+    padding-left: 14px;
+    box-sizing: border-box;
 }
 </style>

@@ -29,6 +29,9 @@ public class EmpBasicController {
     @Autowired
     PositionService positionService;
 
+    @Autowired
+    DepartmentService departmentService;
+
     /**
      * 根据页码获取一页员工信息
      *
@@ -107,5 +110,15 @@ public class EmpBasicController {
         ResponseBean responseBean = ResponseBean.build().setStatus(200)
                 .setObject(String.format("%08d", employeeService.getMaxWorkId()));
         return responseBean;
+    }
+
+    /**
+     * 获取所有部门的数据
+     *
+     * @return 部门信息
+     */
+    @GetMapping("/departments")
+    public List<Department> getAllDepartments() {
+        return departmentService.getAllDepartments();
     }
 }
