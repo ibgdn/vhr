@@ -388,7 +388,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addEmployeeSubmit">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -573,7 +573,16 @@ export default {
             this.employee.departmentId = data.id;
             this.selectedDepartment = data.name;
             this.popVisible = !this.popVisible;
-        }
+        },
+        // 添加员工信息
+        addEmployeeSubmit() {
+            this.postJsonReq("/emp/basic/", this.employee).then(response => {
+                if (response) {
+                    this.dialogVisible = false;
+                    this.initEmployees();
+                }
+            });
+        },
     }
 }
 </script>
