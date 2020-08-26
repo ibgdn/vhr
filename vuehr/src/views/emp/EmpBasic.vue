@@ -196,7 +196,7 @@
             :visible.sync="dialogVisible"
             width="55%">
             <div>
-                <el-form>
+                <el-form :model="employee" :rules="employeeRules" ref="employeeForm">
                     <el-row>
                         <el-col :span="6">
                             <el-form-item label="姓名：" prop="name">
@@ -423,7 +423,7 @@ export default {
                 email: "laowangg@qq.com",
                 phone: "18565558897",
                 address: "深圳市南山区",
-                departmentId: 5,
+                departmentId: null,
                 jobLevelId: 9,
                 posId: 29,
                 engageForm: "劳务合同",
@@ -465,6 +465,44 @@ export default {
             },
             // 新增员工的部门
             selectedDepartment: '',
+            // 新增员工的规则
+            employeeRules: {
+                name: [{required: true, message: '请输入员工姓名', trigger: 'blur'}],
+                gender: [{required: true, message: '请输入员工姓别', trigger: 'blur'}],
+                birthday: [{required: true, message: '请选择员工出生日期', trigger: 'blur'}],
+                idCard: [{required: true, message: '请输入员工身份证号码', trigger: 'blur'}, {
+                    pattern: /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/,
+                    message: '身份证号码不正确',
+                    trigger: 'blur'
+                }],
+                wedlock: [{required: true, message: '请选择员工婚姻状况', trigger: 'blur'}],
+                nationId: [{required: true, message: '请选择员工民族', trigger: 'blur'}],
+                nativePlace: [{required: true, message: '请输入员工籍贯', trigger: 'blur'}],
+                politicId: [{required: true, message: '请选择员工政治面貌', trigger: 'blur'}],
+                email: [{required: true, message: '请输入员工邮箱地址', trigger: 'blur'}, {
+                    type: 'email',
+                    message: '邮箱格式不正确',
+                    trigger: 'blur'
+                }],
+                phone: [{required: true, message: '请输入员工手机号码', trigger: 'blur'}],
+                address: [{required: true, message: '请输入员工住址', trigger: 'blur'}],
+                departmentId: [{required: true, message: '请选择员工所属部门', trigger: 'blur'}],
+                jobLevelId: [{required: true, message: '请选择员工职称', trigger: 'blur'}],
+                posId: [{required: true, message: '请选择员工职位', trigger: 'blur'}],
+                engageForm: [{required: true, message: '请选择员工聘用形式', trigger: 'blur'}],
+                tipTopDegree: [{required: true, message: '请选择员工最高学历', trigger: 'blur'}],
+                specialty: [{required: true, message: '请输入员工所学专业', trigger: 'blur'}],
+                school: [{required: true, message: '请输入员工毕业院校', trigger: 'blur'}],
+                beginDate: [{required: true, message: '请输入员工入职日期', trigger: 'blur'}],
+                workState: [{required: true, message: '请输入员工工作状态', trigger: 'blur'}],
+                workId: [{required: true, message: '请输入员工工号', trigger: 'blur'}],
+                contractTerm: [{required: true, message: '请输入员工合同期限', trigger: 'blur'}],
+                conversionTime: [{required: true, message: '请输入员工转正日期', trigger: 'blur'}],
+                notworkDate: [{required: true, message: '请输入员工离职日期', trigger: 'blur'}],
+                beginContract: [{required: true, message: '请输入员工合同起始日期', trigger: 'blur'}],
+                endContract: [{required: true, message: '请输入员工合同结束日期', trigger: 'blur'}],
+                workAge: [{required: true, message: '请输入员工工龄', trigger: 'blur'}],
+            },
         }
     },
     mounted() {
@@ -576,10 +614,14 @@ export default {
         },
         // 添加员工信息
         addEmployeeSubmit() {
-            this.postJsonReq("/emp/basic/", this.employee).then(response => {
-                if (response) {
-                    this.dialogVisible = false;
-                    this.initEmployees();
+            this.$refs['employeeForm'].validate(validate => {
+                if (validate) {
+                    this.postJsonReq("/emp/basic/", this.employee).then(response => {
+                        if (response) {
+                            this.dialogVisible = false;
+                            this.initEmployees();
+                        }
+                    });
                 }
             });
         },
