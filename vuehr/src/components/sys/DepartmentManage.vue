@@ -129,7 +129,7 @@ export default {
                 let department = departments[i];
                 if (department.id === object.parentId) {
                     department.departmentChildren = department.departmentChildren.concat(object);
-                    if (department.departmentChildren.left > 0) {
+                    if (department.departmentChildren.length > 0) {
                         department.parent = true;
                     }
                     return;
