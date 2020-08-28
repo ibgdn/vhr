@@ -121,4 +121,18 @@ public class EmpBasicController {
     public List<Department> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
+
+    /**
+     * 根据员工 ID 删除员工信息
+     *
+     * @param id 员工 ID
+     * @return ResponseBean 操作结果
+     */
+    @DeleteMapping("/{id}")
+    public ResponseBean deleteEmployeeById(@PathVariable Integer id) {
+        if (employeeService.deleteEmployeeById(id) == 1) {
+            return ResponseBean.ok("删除员工信息成功！");
+        }
+        return ResponseBean.error("删除员工信息失败！");
+    }
 }
