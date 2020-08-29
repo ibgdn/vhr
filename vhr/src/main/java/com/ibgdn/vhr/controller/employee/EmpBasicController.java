@@ -135,4 +135,17 @@ public class EmpBasicController {
         }
         return ResponseBean.error("删除员工信息失败！");
     }
+
+    /**
+     * 更新员工信息
+     *
+     * @return ResponseBean 操作结果
+     */
+    @PutMapping("/")
+    public ResponseBean updateEmployee(@RequestBody Employee employee) {
+        if (employeeService.updateEmployee(employee) == 1) {
+            return ResponseBean.ok("更新员工信息成功！");
+        }
+        return ResponseBean.error("更新员工信息失败！");
+    }
 }

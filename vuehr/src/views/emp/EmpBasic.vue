@@ -176,7 +176,8 @@
                     label="操作"
                     width="200">
                     <template slot-scope="scope">
-                        <el-button class="functionButton" size="mini">编辑</el-button>
+                        <el-button class="functionButton" size="mini" @click="showEditEmployeeView(scope.row)">编辑
+                        </el-button>
                         <el-button class="functionButton" size="mini" type="primary">查看高级资料</el-button>
                         <el-button class="functionButton" size="mini" type="danger" @click="deleteEmployee(scope.row)">
                             删除
@@ -194,7 +195,7 @@
             </div>
         </div>
         <el-dialog
-            title="添加员工"
+            :title="title"
             :visible.sync="dialogVisible"
             width="55%">
             <div>
@@ -505,6 +506,8 @@ export default {
                 endContract: [{required: true, message: '请输入员工合同结束日期', trigger: 'blur'}],
                 workAge: [{required: true, message: '请输入员工工龄', trigger: 'blur'}],
             },
+            // 弹窗名称
+            title: '',
         }
     },
     mounted() {
@@ -535,6 +538,8 @@ export default {
         },
         // 添加员工弹出框
         showAddEmployeeView() {
+            this.clearEmployee();
+            this.title = '添加员工';
             this.initPosition();
             this.getMaxWorkId();
             this.dialogVisible = true;
@@ -616,16 +621,31 @@ export default {
         },
         // 添加员工信息
         addEmployeeSubmit() {
-            this.$refs['employeeForm'].validate(validate => {
-                if (validate) {
-                    this.postJsonReq("/emp/basic/", this.employee).then(response => {
-                        if (response) {
-                            this.dialogVisible = false;
-                            this.initEmployees();
-                        }
-                    });
-                }
-            });
+            if (this.employee.id) {
+                // 更新
+                this.$refs['employeeForm'].validate(validate => {
+                    if (validate) {
+                        this.putJsonReq("/emp/basic/", this.employee).then(response => {
+                            if (response) {
+                                this.dialogVisible = false;
+                                this.initEmployees();
+                            }
+                        });
+                    }
+                });
+            } else {
+                // 添加
+                this.$refs['employeeForm'].validate(validate => {
+                    if (validate) {
+                        this.postJsonReq("/emp/basic/", this.employee).then(response => {
+                            if (response) {
+                                this.dialogVisible = false;
+                                this.initEmployees();
+                            }
+                        });
+                    }
+                });
+            }
         },
         // 删除员工信息
         deleteEmployee(data) {
@@ -645,6 +665,47 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        // 编辑员工信息
+        showEditEmployeeView(data) {
+            this.initPosition();
+            this.title = '编辑员工信息';
+            this.employee = data;
+            this.selectedDepartment = data.department.name;
+            this.dialogVisible = true;
+        },
+        // 清空变量数据
+        clearEmployee() {
+            this.employee = {
+                name: "",
+                gender: "",
+                birthday: "",
+                idCard: "",
+                wedlock: "",
+                nationId: null,
+                nativePlace: "",
+                politicId: null,
+                email: "",
+                phone: "",
+                address: "",
+                departmentId: null,
+                jobLevelId: null,
+                posId: null,
+                engageForm: "",
+                tipTopDegree: "",
+                specialty: "",
+                school: "",
+                beginDate: "",
+                workState: "",
+                workId: "",
+                contractTerm: null,
+                conversionTime: "",
+                notworkDate: null,
+                beginContract: "",
+                endContract: "",
+                workAge: null
+            };
+            this.selectedDepartment = '';
         },
     }
 }
