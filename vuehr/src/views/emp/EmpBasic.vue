@@ -355,7 +355,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="合同转正日期：" prop="endContract">
+                            <el-form-item label="合同截止日期：" prop="endContract">
                                 <el-date-picker size="mini" style="width: 130px;" v-model="employee.endContract"
                                                 value-format="yyyy-MM-dd" type="date"
                                                 aria-placeholder="合同转正日期"></el-date-picker>
@@ -417,7 +417,7 @@ export default {
             employee: {
                 name: "employee",
                 gender: "男",
-                birthday: "1989-12-31 12:24:31",
+                birthday: "1989-12-31",
                 idCard: "610122198912311256",
                 wedlock: "已婚",
                 nationId: 1,
@@ -433,14 +433,14 @@ export default {
                 tipTopDegree: "本科",
                 specialty: "信息管理与信息技术",
                 school: "深圳大学",
-                beginDate: "2017-12-31 10:00:00",
+                beginDate: "2017-12-31",
                 workState: "在职",
                 workId: "00000087",
                 contractTerm: 2,
-                conversionTime: "2018-03-30 09:00:00",
+                conversionTime: "2018-03-30",
                 notworkDate: null,
-                beginContract: "2017-12-31 08:00:01",
-                endContract: "2019-12-03 04:00:00",
+                beginContract: "2017-12-31",
+                endContract: "2019-12-03",
                 workAge: null
             },
             // 添加员工对话框是否展示
@@ -696,7 +696,7 @@ export default {
                 specialty: "",
                 school: "",
                 beginDate: "",
-                workState: "",
+                // workState: "",
                 workId: "",
                 contractTerm: null,
                 conversionTime: "",

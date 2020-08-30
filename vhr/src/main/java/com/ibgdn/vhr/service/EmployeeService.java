@@ -6,6 +6,9 @@ import com.ibgdn.vhr.model.ResponsePageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +18,10 @@ import java.util.List;
 public class EmployeeService {
     @Autowired
     EmployeeMapper employeeMapper;
+
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    DecimalFormat decimalFormat = new DecimalFormat("##.00");
 
     public ResponsePageBean getEmployeeByPage(Integer page, Integer size, String keyword) {
         int start = 0;
@@ -33,7 +40,19 @@ public class EmployeeService {
     }
 
     public Integer addEmployee(Employee employee) {
+        getContractTerm(employee);
+
         return employeeMapper.insertSelective(employee);
+    }
+
+    // 计算合同有效期
+    private void getContractTerm(Employee employee) {
+        // 自动计算合同有效期（单位：年）
+        Date beginContract = employee.getBeginContract();
+        Date endContract = employee.getEndContract();
+        double monthCount = (Double.parseDouble(yearFormat.format(endContract)) - Double.parseDouble(yearFormat.format(beginContract))) * 12
+                + (Double.parseDouble(monthFormat.format(endContract)) - Double.parseDouble(monthFormat.format(beginContract)));
+        employee.setContractTerm(Double.parseDouble(decimalFormat.format(monthCount / 12)));
     }
 
     public Integer getMaxWorkId() {
@@ -45,6 +64,7 @@ public class EmployeeService {
     }
 
     public Integer updateEmployee(Employee employee) {
+        getContractTerm(employee);
         return employeeMapper.updateByPrimaryKeySelective(employee);
     }
 }
