@@ -54,6 +54,10 @@ public class MenuService {
     @Transactional
     public boolean updateRoleMenus(Integer rid, Integer[] menuIds) {
         roleMenusMapper.deleteByRid(rid);
+        // 撤销角色的所有权限，将直接返回，不对数据库操作
+        if (menuIds == null || menuIds.length == 0) {
+            return true;
+        }
         Integer result = roleMenusMapper.insertRoleMenus(rid, menuIds);
         return result == menuIds.length;
     }
