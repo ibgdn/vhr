@@ -2,7 +2,9 @@ package com.ibgdn.vhr.controller.employee;
 
 import com.ibgdn.vhr.model.*;
 import com.ibgdn.vhr.service.*;
+import com.ibgdn.vhr.utils.POIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -107,9 +109,8 @@ public class EmpBasicController {
      */
     @GetMapping("/maxWorkId")
     public ResponseBean getMaxWorkId() {
-        ResponseBean responseBean = ResponseBean.build().setStatus(200)
+        return ResponseBean.build().setStatus(200)
                 .setObject(String.format("%08d", employeeService.getMaxWorkId()));
-        return responseBean;
     }
 
     /**
@@ -147,5 +148,16 @@ public class EmpBasicController {
             return ResponseBean.ok("更新员工信息成功！");
         }
         return ResponseBean.error("更新员工信息失败！");
+    }
+
+    /**
+     * 导出数据（员工信息）
+     *
+     * @return ResponseEntity 数据
+     */
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> exportData() {
+        List<Employee> data = (List<Employee>) employeeService.getEmployeeByPage(null, null, null).getData();
+        return POIUtils.employee2ExcelFile(data);
     }
 }

@@ -75,7 +75,9 @@
         <if test="keyword != null and keyword != ''">
             AND e.name LIKE concat('%', #{keyword}, '%')
         </if>
-        LIMIT #{start},#{size}
+        <if test="start != null and size != null">
+            LIMIT #{start},#{size}
+        </if>
   </select>
   <select id="getTotal" resultType="java.lang.Long">
     SELECT count(*) FROM employee
