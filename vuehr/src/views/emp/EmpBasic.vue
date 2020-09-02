@@ -11,7 +11,8 @@
             </div>
             <div>
                 <el-button type="success"><i class="fa fa-level-up" aria-hidden="true"></i>导入数据</el-button>
-                <el-button type="success"><i class="fa fa-level-down" aria-hidden="true"></i>导出数据</el-button>
+                <el-button type="success" @click="exportData"><i class="fa fa-level-down" aria-hidden="true"></i>导出数据
+                </el-button>
                 <el-button type="primary" @click="showAddEmployeeView"><i class="el-icon-plus" aria-hidden="true"></i>添加用户
                 </el-button>
             </div>
@@ -706,6 +707,10 @@ export default {
                 workAge: null
             };
             this.selectedDepartment = '';
+        },
+        // 导出 Excel 数据
+        exportData() {
+            window.open("/emp/basic/export", "_parent")
         },
     }
 }
