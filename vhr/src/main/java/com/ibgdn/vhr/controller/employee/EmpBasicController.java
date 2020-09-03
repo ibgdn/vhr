@@ -6,7 +6,10 @@ import com.ibgdn.vhr.utils.POIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -159,5 +162,21 @@ public class EmpBasicController {
     public ResponseEntity<byte[]> exportData() {
         List<Employee> data = (List<Employee>) employeeService.getEmployeeByPage(null, null, null).getData();
         return POIUtils.employee2ExcelFile(data);
+    }
+
+    /**
+     * 导入员工信息
+     *
+     * @param file 上传文件
+     * @return ResponseBean 操作结果
+     */
+    @PostMapping("/import")
+    public ResponseBean importData(MultipartFile file) {
+        try {
+            file.transferTo(new File("E:/cache/员工信息.xls"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseBean.ok("导入文件成功！");
     }
 }

@@ -10,11 +10,15 @@
                 <el-button type="primary"><i class="fa fa-angle-double-down" aria-hidden="true"></i>高级搜索</el-button>
             </div>
             <div>
-                <el-button type="success"><i class="fa fa-level-up" aria-hidden="true"></i>导入数据</el-button>
-                <el-button type="success" @click="exportData"><i class="fa fa-level-down" aria-hidden="true"></i>导出数据
-                </el-button>
-                <el-button type="primary" @click="showAddEmployeeView"><i class="el-icon-plus" aria-hidden="true"></i>添加用户
-                </el-button>
+                <el-upload style="display: inline-flex; margin-right: 10px" :show-file-list="false"
+                           :before-upload="beforeUpload" :on-success="onSuccess" :on-error="onError"
+                           action="/emp/basic/import">
+                    <el-button type="success" :disabled="importDisabled" :icon="importDataButtonIcon">
+                        ${{ importDataButtonText }}
+                    </el-button>
+                </el-upload>
+                <el-button type="success" @click="exportData" icon="el-icon-download">导出数据</el-button>
+                <el-button type="primary" @click="showAddEmployeeView" icon="el-icon-plus">添加用户</el-button>
             </div>
         </div>
         <div style="margin-top: 10px">
@@ -509,6 +513,12 @@ export default {
             },
             // 弹窗名称
             title: '',
+            // 导入数据按钮文字
+            importDataButtonText: '导入数据',
+            // 导入数据按钮图标
+            importDataButtonIcon: 'el-icon-upload2',
+            // 导入失效
+            importDisabled: false,
         }
     },
     mounted() {
@@ -712,6 +722,24 @@ export default {
         exportData() {
             window.open("/emp/basic/export", "_parent")
         },
+        // 文件上传前
+        beforeUpload() {
+            this.importDataButtonText = '正在导入...';
+            this.importDataButtonIcon = 'el-icon-loading';
+            this.importDisabled = true;
+        },
+        // 文件导入成功
+        onSuccess(response, file, fileList) {
+            this.importDataButtonText = '导入数据';
+            this.importDataButtonIcon = 'el-icon-upload2';
+            this.importDisabled = false;
+        },
+        // 文件导入失败
+        onError(error, file, fileList) {
+            this.importDataButtonText = '导入数据';
+            this.importDataButtonIcon = 'el-icon-upload2';
+            this.importDisabled = false;
+        }
     }
 }
 </script>
