@@ -1,6 +1,7 @@
 package com.ibgdn.vhr.mapper;
 
 import com.ibgdn.vhr.model.Employee;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface EmployeeMapper {
     Long getTotal(String keyword);
 
     Integer getMaxWorkId();
+
+    Integer addEmployees(@Param("employeeList") List<Employee> employeeList);
 }

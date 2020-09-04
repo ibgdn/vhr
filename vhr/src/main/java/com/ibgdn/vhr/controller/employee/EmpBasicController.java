@@ -172,11 +172,13 @@ public class EmpBasicController {
      */
     @PostMapping("/import")
     public ResponseBean importData(MultipartFile file) {
-        try {
-            file.transferTo(new File("E:/cache/员工信息.xls"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        //            file.transferTo(new File("E:/cache/员工信息.xls"));
+        List<Employee> employeeList = POIUtils.excelFile2Employee(file, nationService.getAllNations(),
+                politicsStatusService.getAllPoliticsStatus(), departmentService.getAllDepartments(),
+                positionService.getAllPositions(), jobLevelService.getAllJobLevels());
+        if (employeeService.addEmployees(employeeList) == employeeList.size()) {
+            return ResponseBean.ok("导入员工信息成功！");
         }
-        return ResponseBean.ok("导入文件成功！");
+        return ResponseBean.error("导入员工信息失败！");
     }
 }

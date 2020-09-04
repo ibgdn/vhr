@@ -289,6 +289,26 @@
       </if>
     </trim>
   </insert>
+  <insert id="addEmployees">
+    insert into employee (name, gender,birthday, idCard, wedlock, nationId,
+    nativePlace, politicId, email, phone, address, departmentId,
+    jobLevelId, posId, engageForm, tiptopDegree, specialty, school,
+    beginDate, workState, workID, contractTerm, conversionTime, notWorkDate,
+    beginContract, endContract, workAge)
+    values
+    <foreach collection="employeeList" separator="," item="employee">
+      (#{employee.name,jdbcType=VARCHAR}, #{employee.gender,jdbcType=CHAR},
+      #{employee.birthday,jdbcType=DATE}, #{employee.idCard,jdbcType=CHAR}, #{employee.wedlock,jdbcType=CHAR},
+      #{employee.nationId,jdbcType=INTEGER},
+      #{employee.nativePlace,jdbcType=VARCHAR}, #{employee.politicId,jdbcType=INTEGER}, #{employee.email,jdbcType=VARCHAR},
+      #{employee.phone,jdbcType=VARCHAR}, #{employee.address,jdbcType=VARCHAR}, #{employee.departmentId,jdbcType=INTEGER},
+      #{employee.jobLevelId,jdbcType=INTEGER}, #{employee.posId,jdbcType=INTEGER}, #{employee.engageForm,jdbcType=VARCHAR},
+      #{employee.tiptopDegree,jdbcType=CHAR}, #{employee.specialty,jdbcType=VARCHAR}, #{employee.school,jdbcType=VARCHAR},
+      #{employee.beginDate,jdbcType=DATE}, #{employee.workState,jdbcType=CHAR}, #{employee.workID,jdbcType=CHAR},
+      #{employee.contractTerm,jdbcType=DOUBLE}, #{employee.conversionTime,jdbcType=DATE}, #{employee.notWorkDate,jdbcType=DATE},
+      #{employee.beginContract,jdbcType=DATE}, #{employee.endContract,jdbcType=DATE}, #{employee.workAge,jdbcType=INTEGER})
+    </foreach>
+  </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.ibgdn.vhr.model.Employee" >
     update employee
     <set >

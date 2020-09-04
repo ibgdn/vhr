@@ -67,4 +67,8 @@ public class EmployeeService {
         getContractTerm(employee);
         return employeeMapper.updateByPrimaryKeySelective(employee);
     }
+
+    public Integer addEmployees(List<Employee> employeeList) {
+        return employeeMapper.addEmployees(employeeList);
+    }
 }
