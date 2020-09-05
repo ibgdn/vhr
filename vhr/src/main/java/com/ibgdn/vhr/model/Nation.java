@@ -1,9 +1,15 @@
 package com.ibgdn.vhr.model;
 
+import java.util.Objects;
+
 public class Nation {
     private Integer id;
 
     private String name;
+
+    public Nation(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
@@ -19,5 +25,18 @@ public class Nation {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Nation nation = (Nation) o;
+        return name.equals(nation.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

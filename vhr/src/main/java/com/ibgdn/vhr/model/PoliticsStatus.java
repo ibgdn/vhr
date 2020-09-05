@@ -1,9 +1,15 @@
 package com.ibgdn.vhr.model;
 
+import java.util.Objects;
+
 public class PoliticsStatus {
     private Integer id;
 
     private String name;
+
+    public PoliticsStatus(String name) {
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
@@ -19,5 +25,18 @@ public class PoliticsStatus {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PoliticsStatus that = (PoliticsStatus) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

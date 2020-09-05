@@ -176,9 +176,13 @@ public class EmpBasicController {
         List<Employee> employeeList = POIUtils.excelFile2Employee(file, nationService.getAllNations(),
                 politicsStatusService.getAllPoliticsStatus(), departmentService.getAllDepartments(),
                 positionService.getAllPositions(), jobLevelService.getAllJobLevels());
-        if (employeeService.addEmployees(employeeList) == employeeList.size()) {
-            return ResponseBean.ok("导入员工信息成功！");
+        for (Employee employee :
+                employeeList) {
+            System.out.println(employee.toString());
         }
+//        if (employeeService.addEmployees(employeeList) == employeeList.size()) {
+//            return ResponseBean.ok("导入员工信息成功！");
+//        }
         return ResponseBean.error("导入员工信息失败！");
     }
 }
