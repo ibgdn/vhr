@@ -4,10 +4,12 @@
             <div style="display: flex;justify-content: space-between">
                 <div>
                     <el-input aria-placeholder="请输入员工姓名搜索" prefix-icon="el-icon-search"
-                              style="width: 300px; margin-right: 10px" v-model="keyword"
-                              clearable @clear="initEmployees"
+                              style="width: 400px; margin-right: 10px" v-model="keyword"
+                              clearable @clear="initEmployees" :disabled="showAdvancedSearch"
                               @keydown.enter.native="initEmployees"></el-input>
-                    <el-button icon="el-icon-search" type="primary" @click="initEmployees">搜索</el-button>
+                    <el-button icon="el-icon-search" type="primary" @click="initEmployees"
+                               :disabled="showAdvancedSearch">搜索
+                    </el-button>
                     <el-button type="primary" @click="showAdvancedSearch = !showAdvancedSearch">
                         <i :class="showAdvancedSearch?'fa fa-angle-double-up':'fa fa-angle-double-down'"
                            aria-hidden="true"></i>高级搜索
