@@ -8,7 +8,10 @@
                               clearable @clear="initEmployees"
                               @keydown.enter.native="initEmployees"></el-input>
                     <el-button icon="el-icon-search" type="primary" @click="initEmployees">搜索</el-button>
-                    <el-button type="primary"><i class="fa fa-angle-double-down" aria-hidden="true"></i>高级搜索</el-button>
+                    <el-button type="primary" @click="showAdvancedSearch = !showAdvancedSearch">
+                        <i :class="showAdvancedSearch?'fa fa-angle-double-up':'fa fa-angle-double-down'"
+                           aria-hidden="true"></i>高级搜索
+                    </el-button>
                 </div>
                 <div>
                     <el-upload style="display: inline-flex; margin-right: 10px" :show-file-list="false"
@@ -22,76 +25,78 @@
                     <el-button type="primary" @click="showAddEmployeeView" icon="el-icon-plus">添加用户</el-button>
                 </div>
             </div>
-            <div class="advancedSearch">
-                <el-row>
-                    <el-col :span="5">
-                        政治面貌：
-                        <el-select size="mini" style="width: 100px" v-model="employee.politicId"
-                                   placeholder="请选择政治面貌">
-                            <el-option v-for="item in politicsStatus" :key="item.id"
-                                       :label="item.name" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="4">
-                        民族：
-                        <el-select size="mini" style="width: 150px" v-model="employee.nationId"
-                                   placeholder="请选择民族">
-                            <el-option v-for="item in nations" :key="item.id" :label="item.name"
-                                       :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="4">
-                        职位：
-                        <el-select size="mini" style="width: 150px" v-model="employee.posId"
-                                   placeholder="请选择职位">
-                            <el-option v-for="item in positions" :key="item.id" :label="item.name"
-                                       :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="4">
-                        职称：
-                        <el-select size="mini" style="width: 120px" v-model="employee.jobLevelId"
-                                   placeholder="请选择职称">
-                            <el-option v-for="item in jobLevels" :key="item.id" :label="item.name"
-                                       :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-col>
-                    <el-col :span="7">
-                        聘用形式：
-                        <el-radio-group v-model="employee.engageForm">
-                            <el-radio label="劳动合同">劳动合同</el-radio>
-                            <el-radio label="劳务合同">劳务合同</el-radio>
-                        </el-radio-group>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="5" style="margin-top: 10px">
-                        所属部门：
-                        <el-popover placement="right" title="请选择部门" width="130" trigger="manual"
-                                    v-model="popVisible">
-                            <el-tree default-expand-all :data="allDepartments" :props="departmentProps"
-                                     @node-click="handleNodeClick"></el-tree>
-                            <div slot="reference" class="departmentSelectDiv"
-                                 @click="showDepartmentsView">所属部门
-                            </div>
-                        </el-popover>
-                    </el-col>
-                    <el-col :span="10" style="margin-top: 10px">
-                        入职日期：
-                        <el-date-picker size="mini" v-model="value1" type="daterange" range-separator="至"
-                                        start-placeholder="开始时间" end-placeholder="结束时间">
-                        </el-date-picker>
-                    </el-col>
-                    <el-col :span="5" offset="4">
-                        <el-button size="mini">取消</el-button>
-                        <el-button size="mini" type="primary" icon="el-icon-search">搜索</el-button>
-                    </el-col>
-                </el-row>
-            </div>
+            <transition name="slide-fade">
+                <div v-show="showAdvancedSearch" class="advancedSearch">
+                    <el-row>
+                        <el-col :span="5">
+                            政治面貌：
+                            <el-select size="mini" style="width: 100px" v-model="employee.politicId"
+                                       placeholder="请选择政治面貌">
+                                <el-option v-for="item in politicsStatus" :key="item.id"
+                                           :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="4">
+                            民族：
+                            <el-select size="mini" style="width: 150px" v-model="employee.nationId"
+                                       placeholder="请选择民族">
+                                <el-option v-for="item in nations" :key="item.id" :label="item.name"
+                                           :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="4">
+                            职位：
+                            <el-select size="mini" style="width: 150px" v-model="employee.posId"
+                                       placeholder="请选择职位">
+                                <el-option v-for="item in positions" :key="item.id" :label="item.name"
+                                           :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="4">
+                            职称：
+                            <el-select size="mini" style="width: 120px" v-model="employee.jobLevelId"
+                                       placeholder="请选择职称">
+                                <el-option v-for="item in jobLevels" :key="item.id" :label="item.name"
+                                           :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :span="7">
+                            聘用形式：
+                            <el-radio-group v-model="employee.engageForm">
+                                <el-radio label="劳动合同">劳动合同</el-radio>
+                                <el-radio label="劳务合同">劳务合同</el-radio>
+                            </el-radio-group>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="5" style="margin-top: 10px">
+                            所属部门：
+                            <el-popover placement="right" title="请选择部门" width="130" trigger="manual"
+                                        v-model="popVisible">
+                                <el-tree default-expand-all :data="allDepartments" :props="departmentProps"
+                                         @node-click="handleNodeClick"></el-tree>
+                                <div slot="reference" class="departmentSelectDiv"
+                                     @click="showDepartmentsView">所属部门
+                                </div>
+                            </el-popover>
+                        </el-col>
+                        <el-col :span="10" style="margin-top: 10px">
+                            入职日期：
+                            <el-date-picker size="mini" v-model="value1" type="daterange" range-separator="至"
+                                            start-placeholder="开始时间" end-placeholder="结束时间">
+                            </el-date-picker>
+                        </el-col>
+                        <el-col :span="5" offset="4">
+                            <el-button size="mini">取消</el-button>
+                            <el-button size="mini" type="primary" icon="el-icon-search">搜索</el-button>
+                        </el-col>
+                    </el-row>
+                </div>
+            </transition>
         </div>
         <div style="margin-top: 10px">
             <el-table
@@ -591,6 +596,8 @@ export default {
             importDataButtonIcon: 'el-icon-upload2',
             // 导入失效
             importDisabled: false,
+            // 是否展示高级搜索条件筛选框
+            showAdvancedSearch: false,
         }
     },
     mounted() {
@@ -842,5 +849,20 @@ export default {
     box-sizing: border-box;
     padding: 5px;
     margin: 10px;
+}
+
+/* 设置不同进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+    transition: all .3s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
 }
 </style>
