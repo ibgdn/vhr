@@ -14,7 +14,7 @@
                            :before-upload="beforeUpload" :on-success="onSuccess" :on-error="onError"
                            action="/emp/basic/import">
                     <el-button type="success" :disabled="importDisabled" :icon="importDataButtonIcon">
-                        ${{ importDataButtonText }}
+                        {{ importDataButtonText }}
                     </el-button>
                 </el-upload>
                 <el-button type="success" @click="exportData" icon="el-icon-download">导出数据</el-button>
@@ -733,6 +733,7 @@ export default {
             this.importDataButtonText = '导入数据';
             this.importDataButtonIcon = 'el-icon-upload2';
             this.importDisabled = false;
+            this.initEmployees();
         },
         // 文件导入失败
         onError(error, file, fileList) {

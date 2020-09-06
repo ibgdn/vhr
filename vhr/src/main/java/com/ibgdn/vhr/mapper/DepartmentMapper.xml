@@ -17,7 +17,7 @@
     id, name, parentId, depPath, enabled, isParent
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from department
     where id = #{id,jdbcType=INTEGER}
@@ -85,7 +85,12 @@
   <select id="deleteDepartmentById" statementType="CALLABLE">
         call deleteDep(#{id,mode=IN,jdbcType=INTEGER},#{result,mode=OUT,jdbcType=INTEGER})
   </select>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ibgdn.vhr.model.Department" >
+  <select id="getAllDepartmentsWithOutChildren" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List"></include>
+    from department
+  </select>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ibgdn.vhr.model.Department" >
     update department
     <set >
       <if test="name != null" >
