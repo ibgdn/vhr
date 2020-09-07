@@ -32,7 +32,7 @@
                     <el-row>
                         <el-col :span="5">
                             政治面貌：
-                            <el-select size="mini" style="width: 100px" v-model="employee.politicId"
+                            <el-select size="mini" style="width: 100px" v-model="advancedSearch.politicId"
                                        placeholder="请选择政治面貌">
                                 <el-option v-for="item in politicsStatus" :key="item.id"
                                            :label="item.name" :value="item.id">
@@ -41,7 +41,7 @@
                         </el-col>
                         <el-col :span="4">
                             民族：
-                            <el-select size="mini" style="width: 150px" v-model="employee.nationId"
+                            <el-select size="mini" style="width: 150px" v-model="advancedSearch.nationId"
                                        placeholder="请选择民族">
                                 <el-option v-for="item in nations" :key="item.id" :label="item.name"
                                            :value="item.id">
@@ -50,7 +50,7 @@
                         </el-col>
                         <el-col :span="4">
                             职位：
-                            <el-select size="mini" style="width: 150px" v-model="employee.posId"
+                            <el-select size="mini" style="width: 150px" v-model="advancedSearch.posId"
                                        placeholder="请选择职位">
                                 <el-option v-for="item in positions" :key="item.id" :label="item.name"
                                            :value="item.id">
@@ -59,7 +59,7 @@
                         </el-col>
                         <el-col :span="4">
                             职称：
-                            <el-select size="mini" style="width: 120px" v-model="employee.jobLevelId"
+                            <el-select size="mini" style="width: 120px" v-model="advancedSearch.jobLevelId"
                                        placeholder="请选择职称">
                                 <el-option v-for="item in jobLevels" :key="item.id" :label="item.name"
                                            :value="item.id">
@@ -68,7 +68,7 @@
                         </el-col>
                         <el-col :span="7">
                             聘用形式：
-                            <el-radio-group v-model="employee.engageForm">
+                            <el-radio-group v-model="advancedSearch.engageForm">
                                 <el-radio label="劳动合同">劳动合同</el-radio>
                                 <el-radio label="劳务合同">劳务合同</el-radio>
                             </el-radio-group>
@@ -80,21 +80,24 @@
                             <el-popover placement="right" title="请选择部门" width="130" trigger="manual"
                                         v-model="popVisible">
                                 <el-tree default-expand-all :data="allDepartments" :props="departmentProps"
-                                         @node-click="handleNodeClick"></el-tree>
+                                         @node-click="advancedSearchHandleNodeClick('advanced')"></el-tree>
                                 <div slot="reference" class="departmentSelectDiv"
-                                     @click="showDepartmentsView">所属部门
+                                     @click="showDepartmentsView">{{ selectedDepartment }}
                                 </div>
                             </el-popover>
                         </el-col>
                         <el-col :span="10" style="margin-top: 10px">
                             入职日期：
-                            <el-date-picker size="mini" v-model="value1" type="daterange" range-separator="至"
+                            <el-date-picker unlink-panels size="mini" v-model="advancedSearch.beginDate"
+                                            type="daterange" range-separator="至" value-format="yyyy-MM-dd"
                                             start-placeholder="开始时间" end-placeholder="结束时间">
                             </el-date-picker>
                         </el-col>
                         <el-col :span="5" offset="4">
                             <el-button size="mini">取消</el-button>
-                            <el-button size="mini" type="primary" icon="el-icon-search">搜索</el-button>
+                            <el-button size="mini" type="primary" icon="el-icon-search"
+                                       @click="initEmployees('advanced')">搜索
+                            </el-button>
                         </el-col>
                     </el-row>
                 </div>
@@ -551,7 +554,7 @@ export default {
                 label: 'name'
             },
             // 新增员工的部门
-            selectedDepartment: '',
+            selectedDepartment: '所属部门',
             // 新增员工的规则
             employeeRules: {
                 name: [{required: true, message: '请输入员工姓名', trigger: 'blur'}],
@@ -600,6 +603,17 @@ export default {
             importDisabled: false,
             // 是否展示高级搜索条件筛选框
             showAdvancedSearch: false,
+            // 高级搜索内容
+            advancedSearch: {
+                politicId: null,
+                nationId: null,
+                jobLevelId: null,
+                posId: null,
+                engageForm: '劳务合同',
+                departmentId: null,
+                beginDate: null,
+                endDate: null,
+            }
         }
     },
     mounted() {
@@ -610,9 +624,20 @@ export default {
     },
     methods: {
         // 初始化职员信息数据
-        initEmployees() {
+        initEmployees(type) {
             this.loading = true;
-            this.getJsonReq("/emp/basic/?page=" + this.page + "&size=" + this.size + "&keyword=" + this.keyword).then(response => {
+            let url = "/emp/basic/?page=" + this.page + "&size=" + this.size;
+            if (type && type === 'advanced') {
+                // 高级搜索
+                url += '&politicId=' + this.advancedSearch.politicId + '&nationId=' + this.advancedSearch.nationId +
+                    '&jobLevelId=' + this.advancedSearch.jobLevelId + '&posId=' + this.advancedSearch.posId +
+                    '&engageForm=' + this.advancedSearch.engageForm + '&departmentId=' + this.advancedSearch.departmentId +
+                    '&beginDateScope=' + this.advancedSearch.beginDateScope;
+            } else {
+                // 普通搜索
+                url += "&name=" + this.keyword;
+            }
+            this.getJsonReq(url).then(response => {
                 this.loading = false;
                 if (response) {
                     this.employees = response.data;
@@ -822,7 +847,13 @@ export default {
             this.importDataButtonText = '导入数据';
             this.importDataButtonIcon = 'el-icon-upload2';
             this.importDisabled = false;
-        }
+        },
+        // 高级搜索
+        advancedSearchHandleNodeClick(data) {
+            this.selectedDepartment = data.name;
+            this.advancedSearch.departmentId = data.id;
+            this.popVisible = !this.popVisible;
+        },
     }
 }
 </script>
