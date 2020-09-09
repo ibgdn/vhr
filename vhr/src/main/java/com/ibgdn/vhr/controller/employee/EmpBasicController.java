@@ -8,8 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,15 +39,17 @@ public class EmpBasicController {
     /**
      * 根据页码获取一页员工信息
      *
-     * @param page    页数
-     * @param size    每页展示数量
-     * @param keyword 搜索关键字
+     * @param page           页数
+     * @param size           每页展示数量
+     * @param employee       员工对象
+     * @param beginDateScope 入职起始范围
      * @return 每页数据
      */
     @GetMapping("/")
     public ResponsePageBean getEmployeeByPage(@RequestParam(defaultValue = "1") Integer page,
-                                              @RequestParam(defaultValue = "10") Integer size, String keyword) {
-        return employeeService.getEmployeeByPage(page, size, keyword);
+                                              @RequestParam(defaultValue = "10") Integer size,
+                                              Employee employee, Date[] beginDateScope) {
+        return employeeService.getEmployeeByPage(page, size, employee, beginDateScope);
     }
 
     /**
@@ -160,7 +161,7 @@ public class EmpBasicController {
      */
     @GetMapping("/export")
     public ResponseEntity<byte[]> exportData() {
-        List<Employee> data = (List<Employee>) employeeService.getEmployeeByPage(null, null, null).getData();
+        List<Employee> data = (List<Employee>) employeeService.getEmployeeByPage(null, null, null, null).getData();
         return POIUtils.employee2ExcelFile(data);
     }
 

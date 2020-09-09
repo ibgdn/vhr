@@ -74,26 +74,26 @@
                             </el-radio-group>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :span="5" style="margin-top: 10px">
+                    <el-row style="margin-top: 10px">
+                        <el-col :span="5">
                             所属部门：
-                            <el-popover placement="right" title="请选择部门" width="130" trigger="manual"
-                                        v-model="popVisible">
+                            <el-popover placement="right" title="请选择部门" width="230" trigger="manual"
+                                        v-model="popVisibleAdvancedSearch">
                                 <el-tree default-expand-all :data="allDepartments" :props="departmentProps"
-                                         @node-click="advancedSearchHandleNodeClick('advanced')"></el-tree>
+                                         @node-click="advancedSearchHandleNodeClick"></el-tree>
                                 <div slot="reference" class="departmentSelectDiv"
-                                     @click="showDepartmentsView">{{ selectedDepartment }}
+                                     @click="showDepartmentsViewAdvancedSearch">{{ selectedDepartment }}
                                 </div>
                             </el-popover>
                         </el-col>
                         <el-col :span="10" style="margin-top: 10px">
                             入职日期：
-                            <el-date-picker unlink-panels size="mini" v-model="advancedSearch.beginDate"
+                            <el-date-picker unlink-panels size="mini" v-model="advancedSearch.beginDateScope"
                                             type="daterange" range-separator="至" value-format="yyyy-MM-dd"
                                             start-placeholder="开始时间" end-placeholder="结束时间">
                             </el-date-picker>
                         </el-col>
-                        <el-col :span="5" offset="4">
+                        <el-col :span="5" :offset="4">
                             <el-button size="mini">取消</el-button>
                             <el-button size="mini" type="primary" icon="el-icon-search"
                                        @click="initEmployees('advanced')">搜索
@@ -609,11 +609,12 @@ export default {
                 nationId: null,
                 jobLevelId: null,
                 posId: null,
-                engageForm: '劳务合同',
+                engageForm: null,
                 departmentId: null,
-                beginDate: null,
-                endDate: null,
-            }
+                beginDateScope: null,
+            },
+            // 高级搜索展示部门树
+            popVisibleAdvancedSearch: false,
         }
     },
     mounted() {
@@ -627,12 +628,29 @@ export default {
         initEmployees(type) {
             this.loading = true;
             let url = "/emp/basic/?page=" + this.page + "&size=" + this.size;
-            if (type && type === 'advanced') {
+            if (type && type === "advanced") {
                 // 高级搜索
-                url += '&politicId=' + this.advancedSearch.politicId + '&nationId=' + this.advancedSearch.nationId +
-                    '&jobLevelId=' + this.advancedSearch.jobLevelId + '&posId=' + this.advancedSearch.posId +
-                    '&engageForm=' + this.advancedSearch.engageForm + '&departmentId=' + this.advancedSearch.departmentId +
-                    '&beginDateScope=' + this.advancedSearch.beginDateScope;
+                if (this.advancedSearch.politicId) {
+                    url += "&politicId=" + this.advancedSearch.politicId;
+                }
+                if (this.advancedSearch.nationId) {
+                    url += "&nationId=" + this.advancedSearch.nationId;
+                }
+                if (this.advancedSearch.jobLevelId) {
+                    url += "&jobLevelId=" + this.advancedSearch.jobLevelId;
+                }
+                if (this.advancedSearch.posId) {
+                    url += "&posId=" + this.advancedSearch.posId;
+                }
+                if (this.advancedSearch.engageForm) {
+                    url += "&engageForm=" + this.advancedSearch.engageForm;
+                }
+                if (this.advancedSearch.departmentId) {
+                    url += "&departmentId=" + this.advancedSearch.departmentId;
+                }
+                if (this.advancedSearch.beginDateScope) {
+                    url += "&beginDateScope=" + this.advancedSearch.beginDateScope;
+                }
             } else {
                 // 普通搜索
                 url += "&name=" + this.keyword;
@@ -852,7 +870,11 @@ export default {
         advancedSearchHandleNodeClick(data) {
             this.selectedDepartment = data.name;
             this.advancedSearch.departmentId = data.id;
-            this.popVisible = !this.popVisible;
+            this.popVisibleAdvancedSearch = !this.popVisibleAdvancedSearch;
+        },
+        // 高级搜索获取部门目录树
+        showDepartmentsViewAdvancedSearch() {
+            this.popVisibleAdvancedSearch = !this.popVisibleAdvancedSearch;
         },
     }
 }

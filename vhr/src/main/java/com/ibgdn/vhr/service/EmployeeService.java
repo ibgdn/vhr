@@ -23,14 +23,14 @@ public class EmployeeService {
     SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
     DecimalFormat decimalFormat = new DecimalFormat("##.00");
 
-    public ResponsePageBean getEmployeeByPage(Integer page, Integer size, String keyword) {
+    public ResponsePageBean getEmployeeByPage(Integer page, Integer size, Employee employee, Date[] beginDateScope) {
         int start = 0;
         if (page != null && size != null) {
             start = (page - 1) * size;
         }
 
-        List<Employee> data = employeeMapper.getEmployeeByPage(start, size, keyword);
-        Long total = employeeMapper.getTotal(keyword);
+        List<Employee> data = employeeMapper.getEmployeeByPage(start, size, employee, beginDateScope);
+        Long total = employeeMapper.getTotal(employee, beginDateScope);
 
         ResponsePageBean responsePageBean = new ResponsePageBean();
         responsePageBean.setData(data);

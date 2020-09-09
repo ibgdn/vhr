@@ -3,6 +3,7 @@ package com.ibgdn.vhr.mapper;
 import com.ibgdn.vhr.model.Employee;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface EmployeeMapper {
@@ -18,9 +19,10 @@ public interface EmployeeMapper {
 
     int updateByPrimaryKey(Employee record);
 
-    List<Employee> getEmployeeByPage(Integer start, Integer size, String keyword);
+    List<Employee> getEmployeeByPage(@Param("start") Integer start, @Param("size") Integer size,
+                                     @Param("employee") Employee employee, @Param("beginDateScope") Date[] beginDateScope);
 
-    Long getTotal(String keyword);
+    Long getTotal(@Param("employee") Employee employee, @Param("beginDateScope") Date[] beginDateScope);
 
     Integer getMaxWorkId();
 
