@@ -3,6 +3,9 @@ package com.ibgdn.vhr.service;
 import com.ibgdn.vhr.mapper.EmployeeMapper;
 import com.ibgdn.vhr.model.Employee;
 import com.ibgdn.vhr.model.ResponsePageBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +19,13 @@ import java.util.List;
  */
 @Service
 public class EmployeeService {
+    public static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
+
     @Autowired
     EmployeeMapper employeeMapper;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
     SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
@@ -42,7 +50,13 @@ public class EmployeeService {
     public Integer addEmployee(Employee employee) {
         getContractTerm(employee);
 
-        return employeeMapper.insertSelective(employee);
+        int result = employeeMapper.insertSelective(employee);
+        if (result == 1) {
+            log.info("员工信息正常插入，即将发送邮件");
+            Employee emp = employeeMapper.getEmployeeById(employee.getId());
+            rabbitTemplate.convertAndSend("server.mail.welcome", emp);
+        }
+        return result;
     }
 
     // 计算合同有效期

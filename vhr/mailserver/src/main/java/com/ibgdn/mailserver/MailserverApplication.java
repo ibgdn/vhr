@@ -15,6 +15,6 @@ public class MailserverApplication {
 
     @Bean
     Queue queue() {
-        return new Queue("mail.server");
+        return new Queue("server.mail.welcome");
     }
 }

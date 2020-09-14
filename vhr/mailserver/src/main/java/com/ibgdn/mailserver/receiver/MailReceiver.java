@@ -30,8 +30,9 @@ public class MailReceiver {
     @Autowired
     TemplateEngine templateEngine;
 
-    @RabbitListener(queues = "mail.server")
+    @RabbitListener(queues = "server.mail.welcome")
     public void handler(Employee employee) {
+        log.info("收到员工[{}]信息，即将发送消息。", employee.toString());
         // 收到 rabbitmq 的消息，将会发送邮件给员工
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

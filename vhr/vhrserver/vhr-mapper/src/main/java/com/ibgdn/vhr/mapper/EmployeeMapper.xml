@@ -132,6 +132,14 @@
   <select id="getMaxWorkId" resultType="java.lang.Integer">
     SELECT max(workId) FROM employee
   </select>
+  <select id="getEmployeeById" resultMap="AllEmployeeInfo">
+    SELECT
+        e.*, pol.id polId, pol.name polName, n.id nid, n.name nname, d.id did, d.name dname, j.id jid, j.name jname, pos.id posId, pos.name posname
+    FROM
+        employee e, nation n, politicsstatus pol, department d, joblevel j, position pos
+    WHERE
+        e.nationid = n.id AND e.politicId = pol.id AND e.departmentId = d.id AND e.jobLevelId = j.id AND e.posId = pos.id AND e.id = #{id}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from employee
     where id = #{id,jdbcType=INTEGER}
@@ -158,7 +166,7 @@
       #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}, #{workAge,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ibgdn.vhr.model.Employee" >
+  <insert id="insertSelective" parameterType="com.ibgdn.vhr.model.Employee" useGeneratedKeys="true" keyProperty="id">
     insert into employee
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
