@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="display: flex; justify-content: space-between">
-            <el-button icon="el-icon-plus" type="primary">添加工资账套</el-button>
+            <el-button icon="el-icon-plus" type="primary" @click="showAddSalaryView">添加工资账套</el-button>
             <el-button icon="el-icon-refresh" type="success">刷新</el-button>
         </div>
         <div style="margin-top: 10px">
@@ -33,6 +33,25 @@
                 </el-table-column>
             </el-table>
         </div>
+        <el-dialog title="添加工资账套" :visible.sync="dialogVisible" width="70%">
+            <div style="display: flex;justify-content: space-around; align-items: center">
+                <el-steps direction="vertical" :active="addSalaryStepActiveIndex">
+                    <el-step :title="itemName" v-for="(itemName, stepIndex) in addSalaryStepItem"
+                             :key="stepIndex"></el-step>
+                </el-steps>
+                <el-input v-for="(itemName, stepIndex) in addSalaryStepItem" :key="stepIndex"
+                          :placeholder="'请输入'+ itemName + '...'" style="width: 200px"
+                          v-show="stepIndex == addSalaryStepActiveIndex"></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addSalaryPreStep">
+                    {{ addSalaryStepActiveIndex == 9 ? '取消' : '上一步' }}
+                </el-button>
+                <el-button @click="addSalaryNextStep" type="primary">
+                    {{ addSalaryStepActiveIndex == 9 ? '完成' : '下一步' }}
+                </el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -42,6 +61,14 @@ export default {
     data() {
         return {
             salaries: [],
+            // 工资套账对话框是否展示
+            dialogVisible: false,
+            // 工资套账添加步骤项
+            addSalaryStepItem: [
+                '基本工资', '交通补助', '午餐补助', '奖金', '养老金比率', '养老金基数', '医疗保险比率', '医疗保险基数', '公积金比率', '公积金基数'
+            ],
+            // 工资套账添加步骤当前激活展示项索引
+            addSalaryStepActiveIndex: 0,
         }
     },
     mounted() {
@@ -54,6 +81,28 @@ export default {
                     this.salaries = response;
                 }
             });
+        },
+        // 添加工资账套对话框
+        showAddSalaryView() {
+            this.dialogVisible = true;
+        },
+        // 添加工资账套点击下一步
+        addSalaryNextStep() {
+            if (this.addSalaryStepActiveIndex >= 9) {
+                alert("ok");
+                return;
+            }
+            this.addSalaryStepActiveIndex++;
+        },
+        // 添加工资账套点击上一步
+        addSalaryPreStep() {
+            if (this.addSalaryStepActiveIndex == 0) {
+                return;
+            } else if (this.addSalaryStepActiveIndex == 9) {
+                this.dialogVisible = false;
+                return;
+            }
+            this.addSalaryStepActiveIndex--;
         },
     }
 }
