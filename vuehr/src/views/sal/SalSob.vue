@@ -33,15 +33,17 @@
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog title="添加工资账套" :visible.sync="dialogVisible" width="70%">
+        <el-dialog title="添加工资账套" :visible.sync="dialogVisible" width="50%">
             <div style="display: flex;justify-content: space-around; align-items: center">
                 <el-steps direction="vertical" :active="addSalaryStepActiveIndex">
                     <el-step :title="itemName" v-for="(itemName, stepIndex) in addSalaryStepItem"
                              :key="stepIndex"></el-step>
                 </el-steps>
-                <el-input v-for="(itemName, stepIndex) in addSalaryStepItem" :key="stepIndex"
-                          :placeholder="'请输入'+ itemName + '...'" style="width: 200px"
-                          v-show="stepIndex == addSalaryStepActiveIndex"></el-input>
+                <!-- for 循环的参数顺序不可随意调整 -->
+                <el-input v-model="salary[itemTitle]" v-for="(itemValue, itemTitle, itemIndex) in salary"
+                          :key="itemIndex" :placeholder="'请输入'+ addSalaryStepItem[itemIndex] + '...'"
+                          style="width: 200px"
+                          v-show="itemIndex == addSalaryStepActiveIndex"></el-input>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addSalaryPreStep">
@@ -65,10 +67,33 @@ export default {
             dialogVisible: false,
             // 工资套账添加步骤项
             addSalaryStepItem: [
-                '基本工资', '交通补助', '午餐补助', '奖金', '养老金比率', '养老金基数', '医疗保险比率', '医疗保险基数', '公积金比率', '公积金基数'
+                '基本工资', '奖金', '午餐补助', '交通补助', '养老金比率', '养老金基数', '医疗保险比率', '医疗保险基数', '公积金比率', '公积金基数'
             ],
             // 工资套账添加步骤当前激活展示项索引
             addSalaryStepActiveIndex: 0,
+            // 工资
+            salary: {
+                // 基本工资
+                basicSalary: 0,
+                // 奖金
+                bonus: 0,
+                // 午餐补助
+                lunchSalary: 0,
+                // 交通补助
+                trafficSalary: 0,
+                // 养老金比率
+                pensionPer: 0,
+                // 养老金基数
+                pensionBase: 0,
+                // 医疗保险比率
+                medicalPer: 0,
+                // 医疗保险基数
+                medicalBase: 0,
+                // 公积金比率
+                accumulationFundPer: 0,
+                // 公积金基数
+                accumulationFundBase: 0,
+            }
         }
     },
     mounted() {
@@ -89,7 +114,7 @@ export default {
         // 添加工资账套点击下一步
         addSalaryNextStep() {
             if (this.addSalaryStepActiveIndex >= 9) {
-                alert("ok");
+                console.log(this.salary);
                 return;
             }
             this.addSalaryStepActiveIndex++;
