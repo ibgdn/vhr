@@ -47,10 +47,10 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addSalaryPreStep">
-                    {{ addSalaryStepActiveIndex == 9 ? '取消' : '上一步' }}
+                    {{ addSalaryStepActiveIndex == this.maxSalaryStepIndex ? '取消' : '上一步' }}
                 </el-button>
                 <el-button @click="addSalaryNextStep" type="primary">
-                    {{ addSalaryStepActiveIndex == 9 ? '完成' : '下一步' }}
+                    {{ addSalaryStepActiveIndex == this.maxSalaryStepIndex ? '完成' : '下一步' }}
                 </el-button>
             </span>
         </el-dialog>
@@ -67,12 +67,14 @@ export default {
             dialogVisible: false,
             // 工资套账添加步骤项
             addSalaryStepItem: [
-                '基本工资', '奖金', '午餐补助', '交通补助', '养老金比率', '养老金基数', '医疗保险比率', '医疗保险基数', '公积金比率', '公积金基数'
+                '账套名称', '基本工资', '奖金', '午餐补助', '交通补助', '养老金比率', '养老金基数', '医疗保险比率', '医疗保险基数', '公积金比率', '公积金基数'
             ],
             // 工资套账添加步骤当前激活展示项索引
             addSalaryStepActiveIndex: 0,
             // 工资
             salary: {
+                // 账套名称
+                name: "",
                 // 基本工资
                 basicSalary: 0,
                 // 奖金
@@ -93,7 +95,11 @@ export default {
                 accumulationFundPer: 0,
                 // 公积金基数
                 accumulationFundBase: 0,
-            }
+            },
+            // 添加工资账套的最小索引
+            miniSalaryStepIndex: 0,
+            // 添加工资账套的最大索引
+            maxSalaryStepIndex: 10,
         }
     },
     mounted() {
@@ -113,18 +119,48 @@ export default {
         },
         // 添加工资账套点击下一步
         addSalaryNextStep() {
-            if (this.addSalaryStepActiveIndex >= 9) {
-                console.log(this.salary);
+            if (this.addSalaryStepActiveIndex >= this.maxSalaryStepIndex) {
+                this.postJsonReq("/salary/sob/", this.salary).then(response => {
+                    if (response) {
+                        this.initSalaries();
+                        this.dialogVisible = false;
+                    }
+                })
                 return;
             }
             this.addSalaryStepActiveIndex++;
         },
         // 添加工资账套点击上一步
         addSalaryPreStep() {
-            if (this.addSalaryStepActiveIndex == 0) {
+            if (this.addSalaryStepActiveIndex == this.miniSalaryStepIndex) {
                 return;
-            } else if (this.addSalaryStepActiveIndex == 9) {
+            } else if (this.addSalaryStepActiveIndex == this.maxSalaryStepIndex) {
+                this.salary = {
+                    // 账套名称
+                    name: "",
+                    // 基本工资
+                    basicSalary: 0,
+                    // 奖金
+                    bonus: 0,
+                    // 午餐补助
+                    lunchSalary: 0,
+                    // 交通补助
+                    trafficSalary: 0,
+                    // 养老金比率
+                    pensionPer: 0,
+                    // 养老金基数
+                    pensionBase: 0,
+                    // 医疗保险比率
+                    medicalPer: 0,
+                    // 医疗保险基数
+                    medicalBase: 0,
+                    // 公积金比率
+                    accumulationFundPer: 0,
+                    // 公积金基数
+                    accumulationFundBase: 0,
+                }
                 this.dialogVisible = false;
+                this.addSalaryStepActiveIndex = 0;
                 return;
             }
             this.addSalaryStepActiveIndex--;

@@ -108,7 +108,7 @@
         #{lunchSalary,jdbcType=INTEGER},
       </if>
       <if test="trafficSalary != null" >
-        #{trafficsalary,jdbcType=INTEGER},
+        #{trafficSalary,jdbcType=INTEGER},
       </if>
       <if test="allSalary != null" >
         #{allsalary,jdbcType=INTEGER},
