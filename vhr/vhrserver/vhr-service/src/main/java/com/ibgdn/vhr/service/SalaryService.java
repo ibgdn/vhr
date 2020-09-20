@@ -21,4 +21,8 @@ public class SalaryService {
         salary.setCreateDate(new Date());
         return salaryMapper.insertSelective(salary);
     }
+
+    public Integer deleteSalary(Integer id) {
+        return salaryMapper.deleteByPrimaryKey(id);
+    }
 }

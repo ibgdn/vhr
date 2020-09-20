@@ -40,4 +40,18 @@ public class SalaryController {
         }
         return ResponseBean.error("添加工资账套信息失败！");
     }
+
+    /**
+     * 删除工资账套信息
+     *
+     * @param id 工资账套信息 id
+     * @return ResponseBean 操作结果
+     */
+    @DeleteMapping("/{id}")
+    public ResponseBean deleteSalary(@PathVariable Integer id) {
+        if (salaryService.deleteSalary(id) == 1) {
+            return ResponseBean.ok("删除工资账套信息成功！");
+        }
+        return ResponseBean.error("删除工资账套信息失败！");
+    }
 }
