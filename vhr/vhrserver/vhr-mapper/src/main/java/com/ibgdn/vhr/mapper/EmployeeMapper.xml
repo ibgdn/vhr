@@ -190,6 +190,7 @@
         salary s ON s.id = es.sid
     LEFT JOIN
         department d ON e.departmentId = d.id
+        ORDER BY e.id, s.id
     <if test="start != null and size != null">
         LIMIT #{start} , #{size}
     </if>
@@ -532,5 +533,8 @@
       endContract = #{endContract,jdbcType=DATE},
       workAge = #{workAge,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateEmployeeSalaryById">
+    REPLACE INTO empsalary (eid, sid) VALUES(#{eid}, #{sid})
   </update>
 </mapper>

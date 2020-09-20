@@ -98,4 +98,8 @@ public class EmployeeService {
         responsePageBean.setTotal(employeeMapper.getTotal(null, null));
         return responsePageBean;
     }
+
+    public Integer updateEmployeeSalaryById(Integer eid, Integer sid) {
+        return employeeMapper.updateEmployeeSalaryById(eid, sid);
+    }
 }

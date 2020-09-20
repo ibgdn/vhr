@@ -66,7 +66,7 @@
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-popover placement="left" title="修改工资套账" width="200" trigger="click"
-                                    @show="showSalaryPop(scope.row.salary)">
+                                    @show="showSalaryPop(scope.row.salary)" @hide="hideSalaryPop(scope.row)">
                             <div>
                                 <el-select v-model="currentSalary" placeholder="请选择工资套账">
                                     <el-option v-for="salary in salaries" :key="salary.id" :label="salary.name"
@@ -119,6 +119,14 @@ export default {
         // 展示工资套账弹出信息
         showSalaryPop(data) {
             this.currentSalary = data.name;
+        },
+        // 关闭工资套账弹出信息
+        hideSalaryPop(data) {
+            this.putJsonReq("/salary/sobcfg/?eid=" + data.id + "&sid=" + this.currentSalary).then(response => {
+                if (response) {
+                    this.initEmployees();
+                }
+            });
         },
     },
 }
