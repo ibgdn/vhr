@@ -54,4 +54,18 @@ public class SalaryController {
         }
         return ResponseBean.error("删除工资账套信息失败！");
     }
+
+    /**
+     * 更新工资账套信息
+     *
+     * @param salary 工资账套信息
+     * @return ResponseBean 操作结果
+     */
+    @PutMapping("/")
+    public ResponseBean updateSalary(@RequestBody Salary salary) {
+        if (salaryService.updateSalary(salary) == 1) {
+            return ResponseBean.ok("更新工资账套信息成功！");
+        }
+        return ResponseBean.error("更新工资账套信息失败！");
+    }
 }

@@ -2,7 +2,7 @@
     <div>
         <div style="display: flex; justify-content: space-between">
             <el-button icon="el-icon-plus" type="primary" @click="showAddSalaryView">添加工资账套</el-button>
-            <el-button icon="el-icon-refresh" type="success">刷新</el-button>
+            <el-button icon="el-icon-refresh" type="success" @click="initSalaries">刷新</el-button>
         </div>
         <div style="margin-top: 10px">
             <el-table :data="salaries" border stripe>
@@ -27,13 +27,13 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="mini">编辑</el-button>
+                        <el-button type="primary" size="mini" @click="showUpdateSalaryView(scope.row)">编辑</el-button>
                         <el-button type="danger" size="mini" @click="deleteSalary(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog title="添加工资账套" :visible.sync="dialogVisible" width="50%">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="50%">
             <div style="display: flex;justify-content: space-around; align-items: center">
                 <el-steps direction="vertical" :active="addSalaryStepActiveIndex">
                     <el-step :title="itemName" v-for="(itemName, stepIndex) in addSalaryStepItem"
@@ -47,7 +47,7 @@
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addSalaryPreStep">
-                    {{ addSalaryStepActiveIndex == this.maxSalaryStepIndex ? '取消' : '上一步' }}
+                    {{ addSalaryStepActiveIndex == this.miniSalaryStepIndex ? '取消' : '上一步' }}
                 </el-button>
                 <el-button @click="addSalaryNextStep" type="primary">
                     {{ addSalaryStepActiveIndex == this.maxSalaryStepIndex ? '完成' : '下一步' }}
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import {putJsonRequest} from "@/utils/api";
+
 export default {
     name: "SalSob",
     data() {
@@ -100,6 +102,8 @@ export default {
             miniSalaryStepIndex: 0,
             // 添加工资账套的最大索引
             maxSalaryStepIndex: 10,
+            // 弹窗标题
+            dialogTitle: '添加工资账套',
         }
     },
     mounted() {
@@ -115,17 +119,55 @@ export default {
         },
         // 添加工资账套对话框
         showAddSalaryView() {
+            // 初始化工资账套信息
+            this.salary = {
+                // 账套名称
+                name: "",
+                // 基本工资
+                basicSalary: 0,
+                // 奖金
+                bonus: 0,
+                // 午餐补助
+                lunchSalary: 0,
+                // 交通补助
+                trafficSalary: 0,
+                // 养老金比率
+                pensionPer: 0,
+                // 养老金基数
+                pensionBase: 0,
+                // 医疗保险比率
+                medicalPer: 0,
+                // 医疗保险基数
+                medicalBase: 0,
+                // 公积金比率
+                accumulationFundPer: 0,
+                // 公积金基数
+                accumulationFundBase: 0,
+            }
+            this.addSalaryStepActiveIndex = this.miniSalaryStepIndex;
+            this.dialogTitle = '添加工资账套';
             this.dialogVisible = true;
         },
         // 添加工资账套点击下一步
         addSalaryNextStep() {
             if (this.addSalaryStepActiveIndex >= this.maxSalaryStepIndex) {
-                this.postJsonReq("/salary/sob/", this.salary).then(response => {
-                    if (response) {
-                        this.initSalaries();
-                        this.dialogVisible = false;
-                    }
-                })
+                // 更新操作
+                if (this.salary.id) {
+                    this.putJsonReq("/salary/sob/", this.salary).then(response => {
+                        if (response) {
+                            this.initSalaries();
+                            this.dialogVisible = false;
+                        }
+                    });
+                } else {
+                    // 添加操作
+                    this.postJsonReq("/salary/sob/", this.salary).then(response => {
+                        if (response) {
+                            this.initSalaries();
+                            this.dialogVisible = false;
+                        }
+                    });
+                }
                 return;
             }
             this.addSalaryStepActiveIndex++;
@@ -135,32 +177,7 @@ export default {
             if (this.addSalaryStepActiveIndex == this.miniSalaryStepIndex) {
                 return;
             } else if (this.addSalaryStepActiveIndex == this.maxSalaryStepIndex) {
-                this.salary = {
-                    // 账套名称
-                    name: "",
-                    // 基本工资
-                    basicSalary: 0,
-                    // 奖金
-                    bonus: 0,
-                    // 午餐补助
-                    lunchSalary: 0,
-                    // 交通补助
-                    trafficSalary: 0,
-                    // 养老金比率
-                    pensionPer: 0,
-                    // 养老金基数
-                    pensionBase: 0,
-                    // 医疗保险比率
-                    medicalPer: 0,
-                    // 医疗保险基数
-                    medicalBase: 0,
-                    // 公积金比率
-                    accumulationFundPer: 0,
-                    // 公积金基数
-                    accumulationFundBase: 0,
-                }
                 this.dialogVisible = false;
-                this.addSalaryStepActiveIndex = 0;
                 return;
             }
             this.addSalaryStepActiveIndex--;
@@ -183,6 +200,23 @@ export default {
                     message: '已取消删除'
                 });
             });
+        },
+        // 编辑并更新工资账套信息
+        showUpdateSalaryView(data) {
+            this.dialogTitle = '编辑工资账套';
+            this.dialogVisible = true;
+            this.salary.name = data.name;
+            this.salary.basicSalary = data.basicSalary;
+            this.salary.bonus = data.bonus;
+            this.salary.lunchSalary = data.lunchSalary;
+            this.salary.trafficSalary = data.trafficSalary;
+            this.salary.pensionPer = data.pensionPer;
+            this.salary.pensionBase = data.pensionBase;
+            this.salary.medicalPer = data.medicalPer;
+            this.salary.medicalBase = data.medicalBase;
+            this.salary.accumulationFundPer = data.accumulationFundPer;
+            this.salary.accumulationFundBase = data.accumulationFundBase;
+            this.salary.id = data.id;
         },
     }
 }
