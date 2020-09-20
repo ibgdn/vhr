@@ -98,7 +98,7 @@ export default {
             // 工资账套数据
             salaries: [],
             // 当前所选工资账套数据
-            currentSalary: '',
+            currentSalary: null,
             // 数据总量
             total: 0,
             // 当前页码
@@ -131,15 +131,22 @@ export default {
         },
         // 展示工资套账弹出信息
         showSalaryPop(data) {
-            this.currentSalary = data.name;
+            if (data) {
+                this.currentSalary = data.name;
+            } else {
+                this.currentSalary = null;
+            }
         },
         // 关闭工资套账弹出信息
         hideSalaryPop(data) {
-            this.putJsonReq("/salary/sobcfg/?eid=" + data.id + "&sid=" + this.currentSalary).then(response => {
-                if (response) {
-                    this.initEmployees();
-                }
-            });
+            if (this.salary) {
+                // 有数据的时候再提交
+                this.putJsonReq("/salary/sobcfg/?eid=" + data.id + "&sid=" + this.currentSalary).then(response => {
+                    if (response) {
+                        this.initEmployees();
+                    }
+                });
+            }
         },
         // 当前页码改变
         currentChange(pageIndex) {
