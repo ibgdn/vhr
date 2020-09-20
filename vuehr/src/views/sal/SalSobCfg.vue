@@ -65,7 +65,16 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="danger" size="mini">修改工资账套</el-button>
+                        <el-popover placement="left" title="修改工资套账" width="200" trigger="click"
+                                    @show="showSalaryPop(scope.row.salary)">
+                            <div>
+                                <el-select v-model="currentSalary" placeholder="请选择工资套账">
+                                    <el-option v-for="salary in salaries" :key="salary.id" :label="salary.name"
+                                               :value="salary.id"></el-option>
+                                </el-select>
+                            </div>
+                            <el-button slot="reference" type="danger" size="mini">修改工资账套</el-button>
+                        </el-popover>
                     </template>
                 </el-table-column>
             </el-table>
@@ -80,10 +89,15 @@ export default {
         return {
             // 员工对象
             employees: [],
+            // 工资账套数据
+            salaries: [],
+            // 当前所选工资账套数据
+            currentSalary: '',
         }
     },
     mounted() {
         this.initEmployees();
+        this.initSalaries();
     },
     methods: {
         // 初始化员工信息
@@ -93,6 +107,18 @@ export default {
                     this.employees = response.data;
                 }
             });
+        },
+        // 初始化工资账套信息
+        initSalaries() {
+            this.getJsonReq("/salary/sobcfg/allSalaries").then(response => {
+                if (response) {
+                    this.salaries = response;
+                }
+            });
+        },
+        // 展示工资套账弹出信息
+        showSalaryPop(data) {
+            this.currentSalary = data.name;
         },
     },
 }
