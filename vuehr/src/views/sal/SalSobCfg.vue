@@ -10,7 +10,7 @@
                 <el-table-column width="120" align="left" prop="department.name" lable="所属部门"></el-table-column>
                 <el-table-column label="所属工资账套" align="center">
                     <template slot-scope="scope">
-                        <el-tooltip placement="right">
+                        <el-tooltip placement="right" v-if="scope.row.salary">
                             <div slot="content">
                                 <table>
                                     <tr>
@@ -61,6 +61,7 @@
                             </div>
                             <el-tag>{{ scope.row.salary.name }}</el-tag>
                         </el-tooltip>
+                        <el-tag v-else>暂未设置</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
@@ -78,6 +79,11 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <div style="display: flex; justify-content: flex-end">
+                <el-pagination background layout="sizes, prev, pager, next, jumper, ->, total, slot" :total="total"
+                               @current-change="currentChange" @size-change="sizeChange">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -93,6 +99,12 @@ export default {
             salaries: [],
             // 当前所选工资账套数据
             currentSalary: '',
+            // 数据总量
+            total: 0,
+            // 当前页码
+            pageIndex: 1,
+            // 每页数量
+            pageSize: 10,
         }
     },
     mounted() {
@@ -102,9 +114,10 @@ export default {
     methods: {
         // 初始化员工信息
         initEmployees() {
-            this.getJsonReq("/salary/sobcfg/").then(response => {
+            this.getJsonReq("/salary/sobcfg/?pageIndex=" + this.pageIndex + "&pageSize=" + this.pageSize).then(response => {
                 if (response) {
                     this.employees = response.data;
+                    this.total = response.total;
                 }
             });
         },
@@ -127,6 +140,16 @@ export default {
                     this.initEmployees();
                 }
             });
+        },
+        // 当前页码改变
+        currentChange(pageIndex) {
+            this.pageIndex = pageIndex;
+            this.initEmployees();
+        },
+        // 每页容量修改
+        sizeChange(pageSize) {
+            this.pageSize = pageSize;
+            this.initEmployees();
         },
     },
 }

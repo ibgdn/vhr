@@ -27,13 +27,13 @@ public class SobConfigController {
      * 分页获取员工账套信息
      *
      * @param pageIndex 页码索引
-     * @param size      单页容量
+     * @param pageSize      单页容量
      * @return ResponsePageBean 分页数据
      */
     @GetMapping("/")
     public ResponsePageBean getEmployeeByPageWithSalary(@RequestParam(defaultValue = "1") Integer pageIndex,
-                                                        @RequestParam(defaultValue = "10") Integer size) {
-        return employeeService.getEmployeeByPageWithSalary(pageIndex, size);
+                                                        @RequestParam(defaultValue = "10") Integer pageSize) {
+        return employeeService.getEmployeeByPageWithSalary(pageIndex, pageSize);
     }
 
     /**
