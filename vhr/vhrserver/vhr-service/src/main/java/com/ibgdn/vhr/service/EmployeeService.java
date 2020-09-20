@@ -2,6 +2,7 @@ package com.ibgdn.vhr.service;
 
 import com.ibgdn.vhr.mapper.EmployeeMapper;
 import com.ibgdn.vhr.model.Employee;
+import com.ibgdn.vhr.model.ResponseBean;
 import com.ibgdn.vhr.model.ResponsePageBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,5 +85,17 @@ public class EmployeeService {
 
     public Integer addEmployees(List<Employee> employeeList) {
         return employeeMapper.addEmployees(employeeList);
+    }
+
+    public ResponsePageBean getEmployeeByPageWithSalary(Integer page, Integer size) {
+        Integer startIndex = 0;
+        if (page != null && size != null) {
+            startIndex = (page - 1) * size;
+        }
+        List<Employee> employeeByPageWithSalary = employeeMapper.getEmployeeByPageWithSalary(startIndex, size);
+        ResponsePageBean responsePageBean = new ResponsePageBean();
+        responsePageBean.setData(employeeByPageWithSalary);
+        responsePageBean.setTotal(employeeMapper.getTotal(null, null));
+        return responsePageBean;
     }
 }

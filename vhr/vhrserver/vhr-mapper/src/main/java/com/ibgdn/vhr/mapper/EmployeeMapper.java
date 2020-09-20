@@ -1,6 +1,7 @@
 package com.ibgdn.vhr.mapper;
 
 import com.ibgdn.vhr.model.Employee;
+import com.ibgdn.vhr.model.ResponseBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -29,4 +30,6 @@ public interface EmployeeMapper {
     Integer addEmployees(@Param("employeeList") List<Employee> employeeList);
 
     Employee getEmployeeById(Integer id);
+
+    List<Employee> getEmployeeByPageWithSalary(@Param("start") Integer start, @Param("size") Integer size);
 }

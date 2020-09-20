@@ -78,6 +78,9 @@ public class Employee implements Serializable {
 
     private Position position;
 
+    // 工资账套信息
+    private Salary salary;
+
     public Integer getId() {
         return id;
     }
@@ -340,6 +343,14 @@ public class Employee implements Serializable {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public Salary getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Salary salary) {
+        this.salary = salary;
     }
 
     @Override
