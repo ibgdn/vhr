@@ -159,6 +159,10 @@
       <result column="spensionPer" property="pensionPer"  jdbcType="REAL"/>
       <result column="strafficSalary" property="trafficSalary"  jdbcType="INTEGER"/>
     </association>
+    <association property="department" javaType="com.ibgdn.vhr.model.Department">
+      <id column="did" property="id" jdbcType="INTEGER"/>
+      <result column="dname" property="name"/>
+    </association>
   </resultMap>
   <select id="getEmployeeByPageWithSalary" resultMap="EmployeeWithSalary">
     SELECT
@@ -176,13 +180,16 @@
         s.name sname,
         s.pensionBase spensionBase,
         s.pensionPer spensionPer,
-        s.trafficSalary strafficSalary
+        s.trafficSalary strafficSalary,
+        d.name dname
     FROM
         employee e
     LEFT JOIN
         empsalary es ON e.id = es.eid
     LEFT JOIN
         salary s ON s.id = es.sid
+    LEFT JOIN
+        department d ON e.departmentId = d.id
     <if test="start != null and size != null">
         LIMIT #{start} , #{size}
     </if>
