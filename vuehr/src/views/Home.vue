@@ -3,16 +3,18 @@
         <el-container>
             <el-header class="homeHeader">
                 <div class="title">微人事</div>
-                <el-dropdown class="userInfo" @command="commandHandler">
-  <span class="el-dropdown-link">
-      {{ user.name }}<i><img :src="user.userface" alt=""></i>
-  </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
-                        <el-dropdown-item command="setting">设置</el-dropdown-item>
-                        <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+                <div>
+                    <el-button icon="el-icon-bell" size="normal" type="text" @click="goChatting"
+                               style="color: #000000; margin-right: 10px"></el-button>
+                    <el-dropdown class="userInfo" @command="commandHandler">
+                        <span class="el-dropdown-link">{{ user.name }}<i><img :src="user.userface" alt=""></i></span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="userinfo">个人中心</el-dropdown-item>
+                            <el-dropdown-item command="setting">设置</el-dropdown-item>
+                            <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
             </el-header>
             <el-container>
                 <el-aside width="200px">
@@ -91,7 +93,11 @@ export default {
             this.$router.push(index);
             // console.log(index);
             // console.log(indexPath);
-        }
+        },
+        // 聊天
+        goChatting() {
+            this.$router.push("/chat");
+        },
     }
 }
 </script>
@@ -109,7 +115,7 @@ export default {
 .homeHeader .title {
     font-size: 30px;
     font-family: 微软雅黑;
-    color: #ffffff / /;
+    color: #ffffff;
 }
 
 .homeHeader .userInfo {
@@ -137,7 +143,7 @@ export default {
     padding-top: 50px;
 }
 
-.homeRouterView{
+.homeRouterView {
     margin-top: 10px;
 }
 </style>
