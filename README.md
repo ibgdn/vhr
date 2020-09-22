@@ -43,3 +43,16 @@ docker run -d --hostname my-rabbit --name customize-rabbit-name -p 5672:5672 -p 
 docker rm $(docker ps -a -q)
 ```
 
+
+
+#### Chat
+
+需要添加 `https://github.com/is-liyiwei/vue-Chat-demo`
+
+安装依赖模块：
+
+```
+npm install sass-loader --save-dev
+npm install sass --save-dev
+```
+
