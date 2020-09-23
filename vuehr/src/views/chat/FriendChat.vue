@@ -1,13 +1,62 @@
 <template>
-    <div><h2>在线聊天</h2></div>
+    <div id="app">
+        <div class="sidebar">
+            <card></card>
+            <list></list>
+        </div>
+        <div class="main">
+            <message></message>
+            <userText></userText>
+        </div>
+    </div>
 </template>
 
 <script>
+import card from '../../components/chat/card.vue'
+import list from '../../components/chat/list.vue'
+import message from '../../components/chat/message.vue'
+import userText from '../../components/chat/userText.vue'
+
 export default {
-    name: "FriendChat"
+    name: "FriendChat",
+    data() {
+        return {}
+    },
+    mounted: function () {
+        this.$store.dispatch('initData');
+    },
+    components: {
+        card,
+        list,
+        message,
+        userText
+    },
 }
 </script>
 
 <style scoped>
+#app {
+    margin: 20px auto;
+    width: 800px;
+    height: 600px;
+    overflow: hidden;
+    border-radius: 10px;
 
+    .sidebar, .main {
+        height: 100%;
+    }
+
+    .sidebar {
+        float: left;
+        color: #f4f4f4;
+        background-color: #2e3238;
+        width: 200px;
+    }
+
+    .main {
+        position: relative;
+        overflow: hidden;
+        background-color: #eee;
+    }
+}
 </style>
