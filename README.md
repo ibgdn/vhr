@@ -56,3 +56,6 @@ npm install sass-loader --save-dev
 npm install sass --save-dev
 ```
 
+
+
+由于 Vue 版本更新，页面没有再做调整，聊天功能暂缓开发。
