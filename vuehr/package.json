@@ -10,7 +10,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
-    "elliptic": "^6.5.3",
+    "elliptic": "^6.5.4",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.19",
     "vue": "^2.6.11",
